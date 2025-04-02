@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "ed-utility"
-version = "0.1.0"
+name = "ed-infrastructure"
+version = "0.1.1"
 description = ""
 authors = ["ffekirnew <ffekirnew0808@gmail.com>"]
 readme = "README.md"
