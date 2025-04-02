@@ -4,18 +4,18 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="ed_utility",
+    name="ed_infrastructure",
     author="Fikernew Birhanu",
     author_email="fikernew.birhanu.waju@gmail.com",
-    description="EasyDrop utils Package",
-    keywords="ed_utility, pypi, package",
+    description="EasyDrop infrastructure Package",
+    keywords="ed_infrastructure, pypi, package",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ffekirnew/rmediator",
     project_urls={
-        "Documentation": "https://github.com/easydropet/ed-utils",
-        "Bug Reports": "https://github.com/easydropet/ed-utils/issues",
-        "Source Code": "https://github.com/easydropet/ed-utils",
+        "Documentation": "https://github.com/easydropet/ed-infrastructure",
+        "Bug Reports": "https://github.com/easydropet/ed-infrastructure/issues",
+        "Source Code": "https://github.com/easydropet/ed-infrastructure",
         # 'Funding': '',
         # 'Say Thanks!': '',
     },

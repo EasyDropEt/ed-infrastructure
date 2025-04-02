@@ -1,8 +1,8 @@
 from ed_domain.core.entities.route import Route
 from ed_domain.core.repositories.abc_route_repository import ABCRouteRepository
 
-from ed_utility.persistence.mongo_db.db_client import DbClient
-from ed_utility.persistence.mongo_db.repositories.generic_repository import \
+from ed_infrastructure.persistence.mongo_db.db_client import DbClient
+from ed_infrastructure.persistence.mongo_db.repositories.generic_repository import \
     GenericRepository
 
 

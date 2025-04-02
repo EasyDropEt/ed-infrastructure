@@ -9,8 +9,8 @@ from ed_domain.core.repositories import (ABCBillRepository,
                                          ABCRouteRepository, ABCUnitOfWork,
                                          ABCUserRepository)
 
-from ed_utility.persistence.mongo_db.db_client import DbClient
-from ed_utility.persistence.mongo_db.repositories import (
+from ed_infrastructure.persistence.mongo_db.db_client import DbClient
+from ed_infrastructure.persistence.mongo_db.repositories import (
     BillRepository, BusinessRepository, CarRepository, ConsumerRepository,
     DeliveryJobRepository, DriverRepository, LocationRepository,
     OrderRepository, OtpRepository, RouteRepository, UserRepository)

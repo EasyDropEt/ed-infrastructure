@@ -2,8 +2,8 @@ from ed_domain.core.entities import Consumer
 from ed_domain.core.repositories.abc_consumer_repository import \
     ABCConsumerRepository
 
-from ed_utility.persistence.mongo_db.db_client import DbClient
-from ed_utility.persistence.mongo_db.repositories.generic_repository import \
+from ed_infrastructure.persistence.mongo_db.db_client import DbClient
+from ed_infrastructure.persistence.mongo_db.repositories.generic_repository import \
     GenericRepository
 
 

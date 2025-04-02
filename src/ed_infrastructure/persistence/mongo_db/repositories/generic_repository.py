@@ -4,8 +4,8 @@ from uuid import UUID
 from ed_domain.core.repositories.abc_generic_repository import \
     ABCGenericRepository
 
-from ed_utility.persistence.helpers import repository_class
-from ed_utility.persistence.mongo_db.db_client import DbClient
+from ed_infrastructure.persistence.helpers import repository_class
+from ed_infrastructure.persistence.mongo_db.db_client import DbClient
 
 TEntity = TypeVar("TEntity")
 

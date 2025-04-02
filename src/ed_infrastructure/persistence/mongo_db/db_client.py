@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
-from ed_utility.persistence.interfaces.abc_db_client import ABCDbClient
+from ed_infrastructure.persistence.interfaces.abc_db_client import ABCDbClient
 
 UUID_REPRESENTATION = "standard"
 
