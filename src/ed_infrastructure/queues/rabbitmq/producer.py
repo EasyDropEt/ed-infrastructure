@@ -18,9 +18,13 @@ class RabbitMQProducer(Generic[TMessageSchema], ABCProducer[TMessageSchema]):
 
     def start(self) -> None:
         LOG.info("Starting producer...")
-        self._channel = self._connection.channel()
-        self._channel.queue_declare(queue=self._queue, durable=True)
-
+        try:
+            self._channel = self._connection.channel()
+            self._channel.queue_declare(queue=self._queue, durable=True)
+            LOG.info(f"Successfully declared queue: {self._queue}")
+        except Exception as e:
+            LOG.error(f"Failed to start producer: {e}")
+            raise
     def stop(self) -> None:
         LOG.info("Stopping producer...")
         if self._connection.is_open:
