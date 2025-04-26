@@ -25,6 +25,7 @@ class RabbitMQProducer(Generic[TMessageSchema], ABCProducer[TMessageSchema]):
         except Exception as e:
             LOG.error(f"Failed to start producer: {e}")
             raise
+
     def stop(self) -> None:
         LOG.info("Stopping producer...")
         if self._connection.is_open:
@@ -33,21 +34,21 @@ class RabbitMQProducer(Generic[TMessageSchema], ABCProducer[TMessageSchema]):
     def publish(self, message: TMessageSchema) -> None:
         if not hasattr(self, "_channel") or not self._channel.is_open:
             LOG.error("Producer has not been started or channel is closed")
-            raise RuntimeError("Producer has not been started or channel is closed")
+            raise RuntimeError(
+                "Producer has not been started or channel is closed")
         try:
             # Consider using delivery confirmations
             self._channel.confirm_delivery()
             serialized_message = jsons.dumps(message)
             self._channel.basic_publish(
-                exchange="", 
-                routing_key=self._queue, 
-                body=serialized_message
+                exchange="", routing_key=self._queue, body=serialized_message
             )
             LOG.info(f"Message sent to queue: {self._queue}")
             LOG.debug(f"Message content: {serialized_message[:200]}...")
         except Exception as e:
             LOG.error(f"Failed to publish message to queue {self._queue}: {e}")
             raise
+
     def _connect_with_connection_parameters(
         self, host: str, port: int
     ) -> BlockingConnection:

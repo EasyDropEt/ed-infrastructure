@@ -289,13 +289,13 @@ files = [
 
 [[package]]
 name = "ed-domain"
-version = "0.2.6"
+version = "0.2.12"
 description = "EasyDrop domain model Package"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "ed_domain-0.2.6-py3-none-any.whl", hash = "sha256:74ca97acb7417307436b2ca5ad1e294738be6223e1eea6ca8a197e6feb5ba892"},
+    {file = "ed_domain-0.2.12-py3-none-any.whl", hash = "sha256:2d52ffdac85713511a273afb7413898cf4303e89e273588a63bedcf94ca444c8"},
 ]
 
 [package.extras]
@@ -842,6 +842,22 @@ files = [
 requests = ">=2.0.1,<3.0.0"
 
 [[package]]
+name = "resend"
+version = "2.7.0"
+description = "Resend Python SDK"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "resend-2.7.0-py2.py3-none-any.whl", hash = "sha256:104b34d3781b42593299633839e709e88056949e62fbcc915a937f5aad0678b2"},
+    {file = "resend-2.7.0.tar.gz", hash = "sha256:b419cd9125a0c180bb8e60453ee524e04cb1d067b14ad63ae53ee2e3886ead02"},
+]
+
+[package.dependencies]
+requests = ">=2.31.0"
+typing-extensions = ">=4.4.0"
+
+[[package]]
 name = "rfc3986"
 version = "2.0.0"
 description = "Validating URI References per RFC 3986"
@@ -1061,4 +1077,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "eb662bd0e79313785dbc4764fc32c06e1c9db17c94dbec883a985ee6ff058b82"
+content-hash = "6b2e593bb12352256b62e9ad98450e9a59c130547b327ba7473df65e1e3e8a8b"
