@@ -9,31 +9,36 @@ class SmsSender(ABCSmsSender):
         self._api_key = api_key
 
     async def send(self, recipient: str, message: str) -> None:
-        conn = http.client.HTTPSConnection("kq13q8.api.infobip.com")
-        payload = json.dumps(
-            {
-                "name": "2fa test application",
-                "enabled": True,
-                "configuration": {
-                    "pinAttempts": 10,
-                    "allowMultiplePinVerifications": True,
-                    "pinTimeToLive": "15m",
-                    "verifyPinLimit": "1/3s",
-                    "sendPinPerApplicationLimit": "100/1d",
-                    "sendPinPerPhoneNumberLimit": "10/1d",
-                },
-                "pinType": "NUMERIC",
-                "messageText": "Your pin is {{pin}}",
-                "pinLength": 4,
-                "senderId": "ServiceSMS",
+        """Send an SMS message to the specified recipient.
+        
+        Args:
+            recipient: The phone number to send the SMS to
+            message: The content of the SMS message
+            
+        Raises:
+            Exception: If the SMS fails to send
+        """
+        conn = None
+        try:
+            conn = http.client.HTTPSConnection("kq13q8.api.infobip.com")
+            payload = json.dumps({
+                "messages": [{
+                    "destinations": [{"to": recipient}],
+                    "from": "ServiceSMS",
+                    "text": message
+                }]
+            })
+            headers = {
+                "Authorization": f"App {self._api_key}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
             }
-        )
-        headers = {
-            "Authorization": f"App {self._api_key}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-        conn.request("POST", "/2fa/2/applications", payload, headers)
-        res = conn.getresponse()
-        data = res.read()
-        print(data.decode("utf-8"))
+            conn.request("POST", "/sms/2/text/advanced", payload, headers)
+            res = conn.getresponse()
+            data = res.read().decode("utf-8")
+            
+            if res.status < 200 or res.status >= 300:
+                raise Exception(f"Failed to send SMS: {data}")
+        finally:
+            if conn:
+                conn.close()
