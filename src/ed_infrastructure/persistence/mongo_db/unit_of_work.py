@@ -5,6 +5,7 @@ from ed_domain.core.repositories import (ABCBillRepository,
                                          ABCDeliveryJobRepository,
                                          ABCDriverRepository,
                                          ABCLocationRepository,
+                                         ABCNotificationRepository,
                                          ABCOrderRepository, ABCOtpRepository,
                                          ABCRouteRepository, ABCUnitOfWork,
                                          ABCUserRepository)
@@ -13,7 +14,8 @@ from ed_infrastructure.persistence.mongo_db.db_client import DbClient
 from ed_infrastructure.persistence.mongo_db.repositories import (
     BillRepository, BusinessRepository, CarRepository, ConsumerRepository,
     DeliveryJobRepository, DriverRepository, LocationRepository,
-    OrderRepository, OtpRepository, RouteRepository, UserRepository)
+    NotificationRepository, OrderRepository, OtpRepository, RouteRepository,
+    UserRepository)
 
 
 class UnitOfWork(ABCUnitOfWork):
@@ -25,6 +27,7 @@ class UnitOfWork(ABCUnitOfWork):
         self._delivery_job_repository = DeliveryJobRepository(db_client)
         self._driver_repository = DriverRepository(db_client)
         self._location_repository = LocationRepository(db_client)
+        self._notification_repository = NotificationRepository(db_client)
         self._order_repository = OrderRepository(db_client)
         self._otp_repository = OtpRepository(db_client)
         self._route_repository = RouteRepository(db_client)
@@ -57,6 +60,10 @@ class UnitOfWork(ABCUnitOfWork):
     @property
     def location_repository(self) -> ABCLocationRepository:
         return self._location_repository
+
+    @property
+    def notification_repository(self) -> ABCNotificationRepository:
+        return self._notification_repository
 
     @property
     def order_repository(self) -> ABCOrderRepository:

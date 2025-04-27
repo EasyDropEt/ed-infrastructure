@@ -12,6 +12,8 @@ from ed_infrastructure.persistence.mongo_db.repositories.driver_repository impor
     DriverRepository
 from ed_infrastructure.persistence.mongo_db.repositories.location_repository import \
     LocationRepository
+from ed_infrastructure.persistence.mongo_db.repositories.notification_repository import \
+    NotificationRepository
 from ed_infrastructure.persistence.mongo_db.repositories.order_repository import \
     OrderRepository
 from ed_infrastructure.persistence.mongo_db.repositories.otp_repository import \
@@ -29,6 +31,7 @@ __all__ = [
     "DeliveryJobRepository",
     "DriverRepository",
     "LocationRepository",
+    "NotificationRepository",
     "OrderRepository",
     "OtpRepository",
     "RouteRepository",
