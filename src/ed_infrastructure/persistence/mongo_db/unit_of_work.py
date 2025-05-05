@@ -1,4 +1,5 @@
-from ed_domain.core.repositories import (ABCBillRepository,
+from ed_domain.core.repositories import (ABCAuthUserRepository,
+                                         ABCBillRepository,
                                          ABCBusinessRepository,
                                          ABCCarRepository,
                                          ABCConsumerRepository,
@@ -7,15 +8,14 @@ from ed_domain.core.repositories import (ABCBillRepository,
                                          ABCLocationRepository,
                                          ABCNotificationRepository,
                                          ABCOrderRepository, ABCOtpRepository,
-                                         ABCRouteRepository, ABCUnitOfWork,
-                                         ABCUserRepository)
+                                         ABCRouteRepository, ABCUnitOfWork)
 
 from ed_infrastructure.persistence.mongo_db.db_client import DbClient
 from ed_infrastructure.persistence.mongo_db.repositories import (
-    BillRepository, BusinessRepository, CarRepository, ConsumerRepository,
-    DeliveryJobRepository, DriverRepository, LocationRepository,
-    NotificationRepository, OrderRepository, OtpRepository, RouteRepository,
-    UserRepository)
+    AuthUserRepository, BillRepository, BusinessRepository, CarRepository,
+    ConsumerRepository, DeliveryJobRepository, DriverRepository,
+    LocationRepository, NotificationRepository, OrderRepository, OtpRepository,
+    RouteRepository)
 
 
 class UnitOfWork(ABCUnitOfWork):
@@ -31,7 +31,7 @@ class UnitOfWork(ABCUnitOfWork):
         self._order_repository = OrderRepository(db_client)
         self._otp_repository = OtpRepository(db_client)
         self._route_repository = RouteRepository(db_client)
-        self._user_repository = UserRepository(db_client)
+        self._auth_user_repository = AuthUserRepository(db_client)
 
     @property
     def bill_repository(self) -> ABCBillRepository:
@@ -78,5 +78,5 @@ class UnitOfWork(ABCUnitOfWork):
         return self._route_repository
 
     @property
-    def user_repository(self) -> ABCUserRepository:
-        return self._user_repository
+    def auth_user_repository(self) -> ABCAuthUserRepository:
+        return self._auth_user_repository

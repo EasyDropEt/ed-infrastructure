@@ -1,3 +1,5 @@
+from ed_infrastructure.persistence.mongo_db.repositories.auth_user_repository import \
+    AuthUserRepository
 from ed_infrastructure.persistence.mongo_db.repositories.bill_repository import \
     BillRepository
 from ed_infrastructure.persistence.mongo_db.repositories.business_repository import \
@@ -20,8 +22,6 @@ from ed_infrastructure.persistence.mongo_db.repositories.otp_repository import \
     OtpRepository
 from ed_infrastructure.persistence.mongo_db.repositories.route_repository import \
     RouteRepository
-from ed_infrastructure.persistence.mongo_db.repositories.user_repository import \
-    UserRepository
 
 __all__ = [
     "BillRepository",
@@ -35,5 +35,5 @@ __all__ = [
     "OrderRepository",
     "OtpRepository",
     "RouteRepository",
-    "UserRepository",
+    "AuthUserRepository",
 ]
