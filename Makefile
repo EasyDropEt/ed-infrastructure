@@ -1,4 +1,8 @@
-.phony: docker.build docker.run docker.build.quite run build upload
+.phony: export_deps docker.build docker.run docker.build.quite run build upload
+
+export_deps:
+	@echo "Make: Exporting dependencies..."
+	@poetry export --without-hashes --format=requirements.txt > requirements.txt
 
 run:
 	@echo "Make: Running the package..."
