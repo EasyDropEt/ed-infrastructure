@@ -1,5 +1,5 @@
 import resend
-from ed_domain.email.abc_email_sender import ABCEmailSender
+from ed_domain.utils.email.abc_email_sender import ABCEmailSender
 
 
 class EmailSender(ABCEmailSender):

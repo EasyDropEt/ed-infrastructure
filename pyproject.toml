@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ed-infrastructure"
-version = "0.1.6"
+version = "0.1.9"
 description = ""
 authors = ["ffekirnew <ffekirnew0808@gmail.com>"]
 readme = "README.md"
@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 twine = "^6.1.0"
-ed-domain = "0.2.16"
+ed-domain = "0.2.17"
 pymongo = "^4.11.3"
 sqlalchemy = "^2.0.40"
 pika = "^1.3.2"
