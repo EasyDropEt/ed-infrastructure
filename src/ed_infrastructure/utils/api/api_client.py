@@ -31,13 +31,18 @@ class ApiClient(Generic[T], ABCApiClient[T]):
             if "request_model" in self._description
             else {}
         )
+        dumped_data = jsons.dumps(data) if data else None
 
         try:
             LOG.debug(
                 f"Making {method} request to {url} with headers {headers}")
-            response = requests.request(
-                method, url, headers=headers, params=params, data=jsons.dumps(
-                    data)
+            response = (
+                requests.request(
+                    method, url, headers=headers, params=params, data=jsons.dumps(
+                        data)
+                )
+                if dumped_data
+                else requests.request(method, url, headers=headers, params=params)
             )
             LOG.debug(f"Response Status Code: {response.status_code}")
             LOG.debug(f"Response Text: {response.text}")
