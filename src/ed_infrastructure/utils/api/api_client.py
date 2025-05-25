@@ -39,6 +39,11 @@ class ApiClient(Generic[T], ABCApiClient[T]):
                 method, url, headers=headers, params=params, data=jsons.dumps(
                     data)
             )
+            LOG.debug(f"Response Status Code: {response.status_code}")
+            LOG.debug(f"Response Text: {response.text}")
+
+            response.raise_for_status()
+
             return response.json()
         except requests.RequestException as e:
             LOG.error(f"Request failed: {e}")
