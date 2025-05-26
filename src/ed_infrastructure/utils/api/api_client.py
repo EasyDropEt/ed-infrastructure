@@ -44,12 +44,14 @@ class ApiClient(Generic[T], ABCApiClient[T]):
                 if dumped_data
                 else requests.request(method, url, headers=headers, params=params)
             )
+
             LOG.debug(f"Response Status Code: {response.status_code}")
             LOG.debug(f"Response Text: {response.text}")
 
-            response.raise_for_status()
+            api_response: ApiResponse = response.json()
+            api_response["http_status_code"] = response.status_code
+            return api_response
 
-            return response.json()
         except requests.RequestException as e:
             LOG.error(f"Request failed: {e}")
             raise ApplicationException(
