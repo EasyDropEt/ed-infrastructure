@@ -4,12 +4,10 @@ import jsons
 import requests
 from ed_domain.common.exceptions import ApplicationException, Exceptions
 from ed_domain.common.logging import get_logger
-from ed_domain.documentation.common.api_response import ApiResponse
-from ed_domain.documentation.common.endpoint_call_params import \
-    EndpointCallParams
-from ed_domain.documentation.common.endpoint_description import \
-    EndpointDescription
-from ed_domain.utils.api.abc_api_client import ABCApiClient
+from ed_domain.documentation.api.abc_api_client import ABCApiClient
+from ed_domain.documentation.api.definitions import (ApiResponse,
+                                                     EndpointCallParams,
+                                                     EndpointDescription)
 
 T = TypeVar("T")
 LOG = get_logger()
