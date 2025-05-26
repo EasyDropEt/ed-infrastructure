@@ -4,20 +4,20 @@ import jsons
 import requests
 from ed_domain.common.exceptions import ApplicationException, Exceptions
 from ed_domain.common.logging import get_logger
-from ed_domain.documentation.api.abc_api_client import ABCApiClient
+from ed_domain.documentation.api.abc_endpoint_client import ABCEndpointClient
 from ed_domain.documentation.api.definitions import (ApiResponse,
                                                      EndpointCallParams,
                                                      EndpointDescription)
 
-T = TypeVar("T")
+TResponceType = TypeVar("TResponceType")
 LOG = get_logger()
 
 
-class ApiClient(Generic[T], ABCApiClient[T]):
+class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
     def __init__(self, description: EndpointDescription):
         self._description = description
 
-    def __call__(self, call_params: EndpointCallParams) -> ApiResponse[T]:
+    def __call__(self, call_params: EndpointCallParams) -> ApiResponse[TResponceType]:
         self._validate_endpoint_description(call_params)
 
         url = self._build_url(call_params)

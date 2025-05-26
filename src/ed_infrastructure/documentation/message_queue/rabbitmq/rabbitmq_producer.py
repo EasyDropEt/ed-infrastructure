@@ -3,8 +3,8 @@ from typing import Generic, TypeVar
 
 import jsons
 from ed_domain.common.logging import get_logger
-from ed_domain.documentation.message_queue.rabbitmq.abc_rabbitmq_producer import \
-    ABCRabbitProducer
+from ed_domain.documentation.message_queue.rabbitmq.abc_queue_producer import \
+    ABCQueueProducer
 from pika.adapters import BlockingConnection
 from pika.connection import URLParameters
 
@@ -12,7 +12,7 @@ LOG = get_logger()
 TRequestModel = TypeVar("TRequestModel")
 
 
-class RabbitMQProducer(Generic[TRequestModel], ABCRabbitProducer[TRequestModel]):
+class RabbitMQProducer(Generic[TRequestModel], ABCQueueProducer[TRequestModel]):
     def __init__(self, url: str, queue: str) -> None:
         self._queue = queue
         self._connection = self._connect_with_url_parameters(url)
@@ -32,7 +32,7 @@ class RabbitMQProducer(Generic[TRequestModel], ABCRabbitProducer[TRequestModel])
         if self._connection.is_open:
             self._connection.close()
 
-    def publish(self, message: TRequestModel) -> None:
+    def publish(self, request: TRequestModel) -> None:
         if not hasattr(self, "_channel") or not self._channel.is_open:
             LOG.error("Producer has not been started or channel is closed")
             raise RuntimeError(
@@ -40,7 +40,7 @@ class RabbitMQProducer(Generic[TRequestModel], ABCRabbitProducer[TRequestModel])
         try:
             # Consider using delivery confirmations
             self._channel.confirm_delivery()
-            serialized_message = jsons.dumps(message)
+            serialized_message = jsons.dumps(request)
             self._channel.basic_publish(
                 exchange="", routing_key=self._queue, body=serialized_message
             )
