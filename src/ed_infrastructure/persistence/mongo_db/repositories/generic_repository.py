@@ -14,13 +14,19 @@ TEntity = TypeVar("TEntity")
 class GenericRepository(ABCGenericRepository[TEntity], Generic[TEntity]):
     def __init__(self, db: DbClient, collection: str) -> None:
         self._db = db.get_collection(f"{collection}s")
-        self._collection = f"{collection[0].upper()}{collection[1:].lower()}"
+        self._collection_name = f"{collection[0].upper()}{collection[1:].lower()}"
 
-    def get_all(self, **filters: Any) -> list[TEntity]:
-        return list(self._db.find(filters))
+    def get_all(
+        self,
+        sort: list[tuple[str, int]] = [("_id", -1)],
+        **filters: Any,
+    ) -> list[TEntity]:
+        return list(self._db.find(filters, sort=sort))
 
-    def get(self, **filters: Any) -> TEntity | None:
-        if entity := self._db.find_one(filters):
+    def get(
+        self, sort: list[tuple[str, int]] = [("_id", -1)], **filters: Any
+    ) -> TEntity | None:
+        if entity := self._db.find_one(filters, sort=sort):
             return entity
 
         return None
