@@ -289,13 +289,13 @@ files = [
 
 [[package]]
 name = "ed-domain"
-version = "0.3.10"
+version = "0.3.18"
 description = "EasyDrop domain model Package"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "ed_domain-0.3.10-py3-none-any.whl", hash = "sha256:8316fc208ce1e54229c1f07e0e3611e517d315ed10ad9afafaae580b6e404f3e"},
+    {file = "ed_domain-0.3.18-py3-none-any.whl", hash = "sha256:ebf3436ede5363dd268cccf4972fd6e8c68471a295d91afe0fc9fa7ea56c4e67"},
 ]
 
 [package.extras]
@@ -1113,4 +1113,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "0a637f4a88343524218463782e33a8bec7f34059c88f0de217fa837c3ac287b2"
+content-hash = "3105d176c9019b11ea7f14985d3858642f95a8bce4d312f5e375456fe3fbe830"
