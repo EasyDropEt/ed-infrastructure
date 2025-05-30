@@ -1,32 +1,34 @@
-from ed_domain.core.validation import ABCValidator, ValidationErrorType
+from ed_domain.core.validation import (ABCValidator, ValidationError,
+                                       ValidationErrorType, ValidationResponse)
 
 
 class OtpValidator(ABCValidator[str]):
     def validate(
         self,
         value: str,
-        location: str | None = None,
-    ) -> None:
-        otp = value
-        location = location or self._location
+        location: str = ABCValidator.DEFAULT_ERROR_LOCATION,
+    ) -> ValidationResponse:
+        errors: list[ValidationError] = []
 
-        if not otp.isnumeric():
-            self._errors.append(
+        if not value.isnumeric():
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.INVALID_TYPE,
                     "message": "OTP must be numeric.",
-                    "input": otp,
+                    "input": value,
                 }
             )
-            return
+            return ValidationResponse(errors)
 
-        if len(otp) != 4:
-            self._errors.append(
+        if len(value) != 4:
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.INVALID_VALUE,
                     "message": "OTP must be exactly 4 digits long.",
-                    "input": otp,
+                    "input": value,
                 }
             )
+
+        return ValidationResponse(errors)

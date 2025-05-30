@@ -1,35 +1,37 @@
 import re
 
-from ed_domain.core.validation import ABCValidator, ValidationErrorType
+from ed_domain.core.validation import (ABCValidator, ValidationError,
+                                       ValidationErrorType, ValidationResponse)
 
 
 class EmailValidator(ABCValidator[str]):
     def validate(
         self,
         value: str,
-        location: str | None = None,
-    ) -> None:
-        email = value
-        location = location or self._location
+        location: str = ABCValidator.DEFAULT_ERROR_LOCATION,
+    ) -> ValidationResponse:
+        errors: list[ValidationError] = []
 
-        if not email:
-            self._errors.append(
+        if not value:
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.MISSING_FIELD,
                     "message": "Email is required.",
-                    "input": email,
+                    "input": value,
                 }
             )
 
-            return
+            return ValidationResponse(errors)
 
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            self._errors.append(
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.INVALID_VALUE,
                     "message": "Invalid email format.",
-                    "input": email,
+                    "input": value,
                 }
             )
+
+        return ValidationResponse(errors)

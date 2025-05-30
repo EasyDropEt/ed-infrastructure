@@ -1,34 +1,35 @@
 import re
 
-from ed_domain.core.validation import ABCValidator, ValidationErrorType
+from ed_domain.core.validation import (ABCValidator, ValidationError,
+                                       ValidationErrorType, ValidationResponse)
 
 
 class PhoneNumberValidator(ABCValidator[str]):
     def validate(
         self,
         value: str,
-        location: str | None = None,
-    ) -> None:
-        phone_number = value
-        location = location or self._location
+        location: str = ABCValidator.DEFAULT_ERROR_LOCATION,
+    ) -> ValidationResponse:
+        errors: list[ValidationError] = []
 
-        if not phone_number:
-            self._errors.append(
+        if not value:
+            errors.append(
                 {
-                    "location": "body",
+                    "location": location,
                     "type": ValidationErrorType.MISSING_FIELD,
                     "message": "Phone number is required.",
-                    "input": phone_number,
+                    "input": value,
                 }
             )
-            return
+            return ValidationResponse(errors)
 
-        if not re.match(r"^(\+251|0|251)?9\d{8}$", phone_number):
-            self._errors.append(
+        if not re.match(r"^(\+251|0|251)?9\d{8}$", value):
+            errors.append(
                 {
-                    "location": "body",
+                    "location": location,
                     "type": ValidationErrorType.INVALID_VALUE,
                     "message": "Invalid phone number format. It should be in one of the following formats: +2519XXXXXXXX, 2519XXXXXXXX, or 09XXXXXXXX.",
-                    "input": phone_number,
+                    "input": value,
                 }
             )
+        return ValidationResponse(errors)

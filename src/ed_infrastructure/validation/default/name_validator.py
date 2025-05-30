@@ -1,47 +1,47 @@
 import re
 
 from ed_domain.core.validation import ABCValidator, ValidationErrorType
+from ed_domain.core.validation.validation_error import ValidationError
+from ed_domain.core.validation.validation_response import ValidationResponse
 
 
 class NameValidator(ABCValidator[str]):
     def validate(
         self,
         value: str,
-        location: str | None = None,
-    ) -> None:
-        name = value
-        location = location or self._location
+        location: str = ABCValidator.DEFAULT_ERROR_LOCATION,
+    ) -> ValidationResponse:
+        errors: list[ValidationError] = []
 
-        if not name:
-            self._errors.append(
+        if not value:
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.MISSING_FIELD,
                     "message": "Name is required.",
-                    "input": name,
+                    "input": value,
                 }
             )
+            return ValidationResponse(errors)
 
-            return
-
-        if not re.match(r"^[a-zA-Z]+$", name):
-            self._errors.append(
+        if not re.match(r"^[a-zA-Z]+$", value):
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.INVALID_VALUE,
                     "message": "Name must contain only alphabetic characters.",
-                    "input": name,
+                    "input": value,
                 }
             )
-            return
 
-        if len(name) < 2 or len(name) > 50:
-            self._errors.append(
+        if len(value) < 2 or len(value) > 20:
+            errors.append(
                 {
                     "location": location,
                     "type": ValidationErrorType.INVALID_VALUE,
                     "message": "Name must be between 2 and 15 characters long.",
-                    "input": name,
+                    "input": value,
                 }
             )
-            return
+
+        return ValidationResponse(errors)
