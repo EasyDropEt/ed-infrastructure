@@ -4,9 +4,13 @@ export_deps:
 	@echo "Make: Exporting dependencies..."
 	@poetry export --without-hashes --format=requirements.txt > requirements.txt
 
-run:
-	@echo "Make: Running the package..."
-	@python src/server.py
+test:
+	@echo "Make: Running tests..."
+	@python -m pytest .
+
+test.coverage:
+	@echo "Make: Running tests with coverage..."
+	@python -m pytest --cov=src --cov-report=term-missing .
 
 docker.build:
 	@echo "Make: Building a docker image... (Might be minutes)"
