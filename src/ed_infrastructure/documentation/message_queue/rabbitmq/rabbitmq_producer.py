@@ -32,7 +32,7 @@ class RabbitMQProducer(Generic[TRequestModel], ABCQueueProducer[TRequestModel]):
         if self._connection.is_open:
             self._connection.close()
 
-    def publish(self, request: TRequestModel) -> None:
+    async def publish(self, request: TRequestModel) -> None:
         if not hasattr(self, "_channel") or not self._channel.is_open:
             LOG.error("Producer has not been started or channel is closed")
             raise RuntimeError(
