@@ -1,7 +1,7 @@
 from typing import Generic, TypeVar
 
+import aiohttp
 import jsons
-import requests
 from ed_domain.common.exceptions import ApplicationException, Exceptions
 from ed_domain.common.logging import get_logger
 from ed_domain.documentation.api.abc_endpoint_client import ABCEndpointClient
@@ -16,8 +16,12 @@ LOG = get_logger()
 class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
     def __init__(self, description: EndpointDescription):
         self._description = description
+        self._client_session = aiohttp.ClientSession(
+            json_serialize=jsons.dumps)
 
-    def __call__(self, call_params: EndpointCallParams) -> ApiResponse[TResponceType]:
+    async def __call__(
+        self, call_params: EndpointCallParams
+    ) -> ApiResponse[TResponceType]:
         self._validate_endpoint_description(call_params)
 
         url = self._build_url(call_params)
@@ -27,30 +31,31 @@ class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
         data = (
             call_params.get("request", {})
             if "request_model" in self._description
-            else {}
+            else None
         )
         dumped_data = jsons.dumps(data) if data else None
 
         try:
             LOG.debug(
-                f"Making {method} request to {url} with headers {headers}")
-            response = (
-                requests.request(
-                    method, url, headers=headers, params=params, data=jsons.dumps(
-                        data)
-                )
-                if dumped_data
-                else requests.request(method, url, headers=headers, params=params)
+                f"Making  a {method} request to {url} with headers {headers}, params {params}, and data {dumped_data}"
             )
 
-            LOG.debug(f"Response Status Code: {response.status_code}")
-            LOG.debug(f"Response Text: {response.text}")
+            async with self._client_session.request(
+                method=method, url=url, headers=headers, params=params, data=dumped_data
+            ) as response:
+                LOG.debug(f"Response Status Code: {response.status}")
+                response_text = await response.text()
+                LOG.debug(f"Response Text: {response_text}")
 
-            api_response: ApiResponse = response.json()
-            api_response["http_status_code"] = response.status_code
-            return api_response
+                try:
+                    json_data = await response.json()
+                except aiohttp.ContentTypeError:
+                    json_data = {}
 
-        except requests.RequestException as e:
+                json_data["http_status_code"] = response.status
+                return json_data  # type: ignore
+
+        except aiohttp.ClientError as e:
             LOG.error(f"Request failed: {e}")
             raise ApplicationException(
                 Exceptions.InternalServerException,
@@ -95,3 +100,6 @@ class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
                     raise ValueError(
                         f"Path parameter '{placeholder}' is missing in path_params."
                     )
+
+    async def close(self):
+        await self._client_session.close()
