@@ -33,15 +33,14 @@ class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
             if "request_model" in self._description
             else None
         )
-        dumped_data = jsons.dumps(data) if data else None
 
         try:
             LOG.debug(
-                f"Making  a {method} request to {url} with headers {headers}, params {params}, and data {dumped_data}"
+                f"Making  a {method} request to {url} with headers {headers}, params {params}, and data {data}"
             )
 
             async with self._client_session.request(
-                method=method, url=url, headers=headers, params=params, data=dumped_data
+                method=method, url=url, headers=headers, params=params, data=data
             ) as response:
                 LOG.debug(f"Response Status Code: {response.status}")
                 response_text = await response.text()
