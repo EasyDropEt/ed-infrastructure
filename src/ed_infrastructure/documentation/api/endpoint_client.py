@@ -7,7 +7,8 @@ from ed_domain.common.logging import get_logger
 from ed_domain.documentation.api.abc_endpoint_client import ABCEndpointClient
 from ed_domain.documentation.api.definitions import (ApiResponse,
                                                      EndpointCallParams,
-                                                     EndpointDescription)
+                                                     EndpointDescription,
+                                                     HttpMethod)
 
 TResponceType = TypeVar("TResponceType")
 LOG = get_logger()
