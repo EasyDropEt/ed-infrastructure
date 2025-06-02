@@ -29,7 +29,7 @@ class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
         method = self._description["method"]
         headers = call_params.get("headers", {})
         params = call_params.get("query_params", {})
-        data = (
+        json = (
             call_params.get("request", {})
             if "request_model" in self._description
             else None
@@ -37,11 +37,11 @@ class EndpointClient(Generic[TResponceType], ABCEndpointClient[TResponceType]):
 
         try:
             LOG.debug(
-                f"Making  a {method} request to {url} with headers {headers}, params {params}, and data {data}"
+                f"Making  a {method} request to {url} with headers {headers}, params {params}, and data {json}"
             )
 
             async with self._client_session.request(
-                method=method, url=url, headers=headers, params=params, data=data
+                method=method, url=url, headers=headers, params=params, json=json
             ) as response:
                 LOG.debug(f"Response Status Code: {response.status}")
                 response_text = await response.text()
