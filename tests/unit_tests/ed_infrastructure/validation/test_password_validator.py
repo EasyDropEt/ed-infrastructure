@@ -1,5 +1,5 @@
 import pytest
-from ed_domain.core.validation import ValidationErrorType
+from ed_domain.validation import ValidationErrorType
 
 from ed_infrastructure.validation.default.password_validator import \
     PasswordValidator

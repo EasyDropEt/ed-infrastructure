@@ -1,4 +1,4 @@
-from ed_domain.core.validation import (ABCValidator, ValidationError,
+from ed_domain.validation import (ABCValidator, ValidationError,
                                        ValidationErrorType, ValidationResponse)
 
 
