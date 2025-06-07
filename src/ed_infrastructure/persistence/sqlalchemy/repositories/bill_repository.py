@@ -15,7 +15,6 @@ class BillRepository(ABCAsyncBillRepository, AsyncGenericRepository[Bill, BillMo
     def _to_entity(cls, model: BillModel) -> Bill:
         return Bill(
             id=model.id,
-            order_id=model.order_id,
             amount_in_birr=model.amount_in_birr,
             bill_status=model.bill_status,
             due_date=model.due_date,
@@ -29,7 +28,6 @@ class BillRepository(ABCAsyncBillRepository, AsyncGenericRepository[Bill, BillMo
     def _to_model(cls, entity: Bill) -> BillModel:
         return BillModel(
             id=entity.id,
-            order_id=entity.order_id,
             amount_in_birr=entity.amount_in_birr,
             bill_status=entity.bill_status,
             due_date=entity.due_date,

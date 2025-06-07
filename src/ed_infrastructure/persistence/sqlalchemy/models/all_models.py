@@ -57,9 +57,8 @@ class BillModel(BaseModel):
         DateTime(timezone=True), nullable=False)
 
     # Relationship
-    order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
     order: Mapped["OrderModel"] = relationship(
-        "OrderModel", uselist=False, back_populates="bill", lazy="joined"
+        uselist=False, back_populates="bill", lazy="joined"
     )
 
 
@@ -243,8 +242,9 @@ class OrderModel(BaseModel):
         lazy="joined",  # Added back_populates to driver
     )
 
+    bill_id: Mapped[UUID] = mapped_column(ForeignKey("bill.id"))
     bill: Mapped["BillModel"] = relationship(
-        "BillModel", uselist=False, back_populates="order", lazy="joined"
+        uselist=False, back_populates="order", lazy="joined"
     )
 
     parcel_id: Mapped[UUID] = mapped_column(ForeignKey("parcel.id"))
