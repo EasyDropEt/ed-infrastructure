@@ -1,5 +1,5 @@
 import pytest
-from ed_domain.core.validation import ValidationErrorType
+from ed_domain.validation import ValidationErrorType
 
 from ed_infrastructure.validation.default.location_validator import (
     LatitudeValidator, LongitudeValidator)

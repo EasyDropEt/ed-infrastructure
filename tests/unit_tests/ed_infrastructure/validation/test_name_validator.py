@@ -1,5 +1,5 @@
 import pytest
-from ed_domain.core.validation import ValidationErrorType
+from ed_domain.validation import ValidationErrorType
 
 from ed_infrastructure.validation.default.name_validator import NameValidator
 

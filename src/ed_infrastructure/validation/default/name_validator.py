@@ -1,8 +1,8 @@
 import re
 
-from ed_domain.core.validation import ABCValidator, ValidationErrorType
-from ed_domain.core.validation.validation_error import ValidationError
-from ed_domain.core.validation.validation_response import ValidationResponse
+from ed_domain.validation import ABCValidator, ValidationErrorType
+from ed_domain.validation.validation_error import ValidationError
+from ed_domain.validation.validation_response import ValidationResponse
 
 
 class NameValidator(ABCValidator[str]):

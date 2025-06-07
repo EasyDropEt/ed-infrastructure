@@ -1,5 +1,5 @@
 import pytest
-from ed_domain.core.validation import ValidationError, ValidationErrorType
+from ed_domain.validation import ValidationError, ValidationErrorType
 
 from ed_infrastructure.validation.default.email_validator import EmailValidator
 
