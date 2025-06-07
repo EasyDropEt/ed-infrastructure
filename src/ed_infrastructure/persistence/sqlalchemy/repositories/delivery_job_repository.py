@@ -3,8 +3,6 @@ from ed_domain.persistence.async_repositories.abc_async_delivery_job_repository 
     ABCAsyncDeliveryJobRepository
 
 from ed_infrastructure.persistence.sqlalchemy.models import DeliveryJobModel
-from ed_infrastructure.persistence.sqlalchemy.repositories.driver_repository import \
-    DriverRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.waypoint_repository import \
@@ -22,7 +20,7 @@ class DeliveryJobRepository(
     def _to_entity(cls, model: DeliveryJobModel) -> DeliveryJob:
         return DeliveryJob(
             id=model.id,
-            driver=DriverRepository._to_entity(model.driver),
+            driver_id=model.driver_id,
             waypoints=[
                 WaypointRepository._to_entity(model) for model in model.waypoints
             ],
@@ -41,7 +39,7 @@ class DeliveryJobRepository(
     def _to_model(cls, entity: DeliveryJob) -> DeliveryJobModel:
         return DeliveryJobModel(
             id=entity.id,
-            driver_id=entity.driver.id if entity.driver else None,
+            driver_id=entity.driver_id,
             estimated_completion_time=entity.estimated_completion_time,
             estimated_distance_in_kms=entity.estimated_distance_in_kms,
             estimated_payment_in_birr=entity.estimated_payment_in_birr,

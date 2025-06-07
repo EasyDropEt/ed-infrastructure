@@ -28,8 +28,6 @@ class DriverRepository(
             phone_number=model.phone_number,
             current_location=LocationRepository._to_entity(
                 model.current_location),
-            residence_location=LocationRepository._to_entity(
-                model.current_location),
             car=CarRepository._to_entity(model.car),
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,
@@ -47,7 +45,6 @@ class DriverRepository(
             profile_image=entity.profile_image,
             phone_number=entity.phone_number,
             current_location_id=entity.current_location.id,
-            residence_location_id=entity.residence_location.id,
             car_id=entity.car.id,
             available=entity.available,
             email=entity.email,

@@ -279,8 +279,12 @@ class ParcelModel(BaseModel):
 class WaypointModel(BaseModel):
     __tablename__ = "waypoint"
 
-    eta: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    expected_arrival_time: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    actual_arrival_time: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     type: Mapped[WaypointType] = mapped_column(
         Enum(WaypointType), nullable=False)

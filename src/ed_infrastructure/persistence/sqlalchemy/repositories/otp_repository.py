@@ -18,7 +18,7 @@ class OtpRepository(
     def _to_entity(cls, model: OtpModel) -> Otp:
         return Otp(
             id=model.id,
-            user_id=model.user.id,
+            user_id=model.user_id,
             otp_type=model.otp_type,
             value=model.value,
             expiry_datetime=model.expiry_datetime,

@@ -35,7 +35,8 @@ class WaypointRepository(
         return Waypoint(
             id=model.id,
             order=OrderRepository._to_entity(model.order),
-            eta=model.eta,
+            expected_arrival_time=model.expected_arrival_time,
+            actual_arrival_time=model.actual_arrival_time,
             sequence=model.sequence,
             waypoint_type=model.type,
             waypoint_status=model.waypoint_status,
@@ -50,7 +51,8 @@ class WaypointRepository(
         return WaypointModel(
             id=entity.id,
             order_id=entity.order.id,
-            eta=entity.eta,
+            expected_arrival_time=entity.expected_arrival_time,
+            actual_arrival_time=entity.actual_arrival_time,
             sequence=entity.sequence,
             waypoint_type=entity.waypoint_type,
             waypoint_status=entity.waypoint_status,
