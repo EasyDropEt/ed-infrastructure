@@ -10,7 +10,7 @@ from ed_domain.core.entities.notification import NotificationType
 from ed_domain.core.entities.otp import OtpType
 from ed_domain.core.entities.parcel import ParcelSize
 from sqlalchemy import (Boolean, DateTime, Double, Enum, Float, ForeignKey,
-                        Integer, String, Uuid)
+                        Integer, String)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ed_infrastructure.persistence.sqlalchemy.models.base_model import \
@@ -29,12 +29,9 @@ class AuthUserModel(BaseModel):
     phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
-    notifications: Mapped[list["NotificationModel"]] = relationship(
-        back_populates="user", lazy="selectin"
-    )
-    otps: Mapped[list["OtpModel"]] = relationship(
-        back_populates="user", lazy="selectin"
-    )
+    notifications: Mapped[list["NotificationModel"]
+                          ] = relationship(lazy="selectin")
+    otps: Mapped[list["OtpModel"]] = relationship(lazy="selectin")
 
 
 class AdminModel(BaseModel):
@@ -47,9 +44,7 @@ class AdminModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped[AuthUserModel] = relationship(
-        "AuthUserModel", uselist=False, lazy="joined"
-    )
+    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
 
 
 class BillModel(BaseModel):
@@ -79,17 +74,14 @@ class BusinessModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False, lazy="joined"
-    )
+    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
 
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
     location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False, lazy="joined"
-    )
+        uselist=False, lazy="joined")
 
     orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="business", lazy="selectin"
+        back_populates="business", lazy="selectin"
     )
 
 
@@ -254,9 +246,9 @@ class OrderModel(BaseModel):
     bill: Mapped["BillModel"] = relationship(
         "BillModel", uselist=False, back_populates="order", lazy="joined"
     )
-    parcel: Mapped["ParcelModel"] = relationship(
-        "ParcelModel", uselist=False, back_populates="order", lazy="joined"
-    )
+
+    parcel_id: Mapped[UUID] = mapped_column(ForeignKey("parcel.id"))
+    parcel: Mapped["ParcelModel"] = relationship(uselist=False, lazy="joined")
 
 
 class OtpModel(BaseModel):
@@ -281,7 +273,7 @@ class ParcelModel(BaseModel):
     fragile: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
     # Relationships
-    order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
+    ...
 
 
 class WaypointModel(BaseModel):
