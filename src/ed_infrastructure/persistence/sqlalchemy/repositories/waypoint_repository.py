@@ -5,6 +5,8 @@ from ed_domain.persistence.async_repositories.abc_async_waypoint_repository impo
     ABCAsyncWaypointRepository
 from sqlalchemy import update
 
+from ed_infrastructure.persistence.mongo_db.repositories.order_repository import \
+    OrderRepository
 from ed_infrastructure.persistence.sqlalchemy.models import WaypointModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
@@ -32,7 +34,7 @@ class WaypointRepository(
     def _to_entity(cls, model: WaypointModel) -> Waypoint:
         return Waypoint(
             id=model.id,
-            order_id=model.order.id,
+            order=OrderRepository._to_entity(model.order),
             eta=model.eta,
             sequence=model.sequence,
             waypoint_type=model.type,
@@ -47,7 +49,7 @@ class WaypointRepository(
     def _to_model(cls, entity: Waypoint) -> WaypointModel:
         return WaypointModel(
             id=entity.id,
-            order_id=entity.order_id,
+            order_id=entity.order.id,
             eta=entity.eta,
             sequence=entity.sequence,
             waypoint_type=entity.waypoint_type,
