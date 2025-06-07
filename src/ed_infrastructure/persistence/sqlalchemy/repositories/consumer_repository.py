@@ -5,7 +5,7 @@ from ed_domain.persistence.async_repositories.abc_async_consumer_repository impo
 from ed_infrastructure.persistence.sqlalchemy.models import ConsumerModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
-from src.ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \
+from ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \
     LocationRepository
 
 

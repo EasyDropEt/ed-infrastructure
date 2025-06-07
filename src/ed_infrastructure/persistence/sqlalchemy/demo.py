@@ -1,12 +1,10 @@
 import os
 
 from dotenv import load_dotenv
-from ed_domain.core.aggregate_roots import AuthUser
 
-from ed_infrastructure.common.generic import get_new_id
 from ed_infrastructure.persistence.sqlalchemy.db_engine import DbConfig
+from ed_infrastructure.persistence.sqlalchemy.seed import get_seed
 from ed_infrastructure.persistence.sqlalchemy.unit_of_work import UnitOfWork
-from src.ed_infrastructure.persistence.sqlalchemy.seed import get_seed
 
 
 def get_config() -> DbConfig:
