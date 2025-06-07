@@ -8,6 +8,8 @@ from ed_domain.persistence.async_repositories import (
     ABCAsyncDriverRepository, ABCAsyncLocationRepository,
     ABCAsyncNotificationRepository, ABCAsyncOrderRepository,
     ABCAsyncOtpRepository, ABCAsyncUnitOfWork)
+from ed_domain.persistence.async_repositories.abc_async_unit_of_work import \
+    ABCAsyncParcelRepository
 from ed_domain.persistence.async_repositories.abc_async_waypoint_repository import \
     ABCAsyncWaypointRepository
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,7 +22,7 @@ from ed_infrastructure.persistence.sqlalchemy.repositories import (
     AdminRepository, AuthUserRepository, BillRepository, BusinessRepository,
     CarRepository, ConsumerRepository, DeliveryJobRepository, DriverRepository,
     LocationRepository, NotificationRepository, OrderRepository, OtpRepository,
-    WaypointRepository)
+    ParcelRepository, WaypointRepository)
 
 
 class UnitOfWork(ABCAsyncUnitOfWork):
@@ -68,6 +70,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
         self._notification_repository = NotificationRepository()
         self._otp_repository = OtpRepository()
         self._order_repository = OrderRepository()
+        self._parcel_repository = ParcelRepository()
         self._waypoint_repository = WaypointRepository()
 
         self._repositories = [
@@ -133,6 +136,10 @@ class UnitOfWork(ABCAsyncUnitOfWork):
     @property
     def waypoint_repository(self) -> ABCAsyncWaypointRepository:
         return self._waypoint_repository
+
+    @property
+    def parcel_repository(self) -> ABCAsyncParcelRepository:
+        return self._parcel_repository
 
     def _set_repository_sessions(self, session: AsyncSession):
         for repository in self._repositories:
