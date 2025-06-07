@@ -2,9 +2,9 @@ from ed_domain.core.aggregate_roots.driver import Driver
 from ed_domain.persistence.async_repositories.abc_async_driver_repository import \
     ABCAsyncDriverRepository
 
-from ed_infrastructure.persistence.mongo_db.repositories.car_repository import \
-    CarRepository
 from ed_infrastructure.persistence.sqlalchemy.models import DriverModel
+from ed_infrastructure.persistence.sqlalchemy.repositories.car_repository import \
+    CarRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \

@@ -2,13 +2,13 @@ from ed_domain.core.aggregate_roots.order import Order
 from ed_domain.persistence.async_repositories.abc_async_order_repository import \
     ABCAsyncOrderRepository
 
-from ed_infrastructure.persistence.mongo_db.repositories.consumer_repository import \
-    ConsumerRepository
 from ed_infrastructure.persistence.sqlalchemy.models import OrderModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.bill_repository import \
     BillRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.business_repository import \
     BusinessRepository
+from ed_infrastructure.persistence.sqlalchemy.repositories.consumer_repository import \
+    ConsumerRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.driver_repository import \
     DriverRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \

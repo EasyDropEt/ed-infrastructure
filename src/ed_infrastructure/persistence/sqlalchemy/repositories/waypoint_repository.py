@@ -5,11 +5,11 @@ from ed_domain.persistence.async_repositories.abc_async_waypoint_repository impo
     ABCAsyncWaypointRepository
 from sqlalchemy import update
 
-from ed_infrastructure.persistence.mongo_db.repositories.order_repository import \
-    OrderRepository
 from ed_infrastructure.persistence.sqlalchemy.models import WaypointModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
+from ed_infrastructure.persistence.sqlalchemy.repositories.order_repository import \
+    OrderRepository
 
 
 class WaypointRepository(
