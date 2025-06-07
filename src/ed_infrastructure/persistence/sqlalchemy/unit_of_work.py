@@ -87,6 +87,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
             self._otp_repository,
             self._order_repository,
             self._waypoint_repository,
+            self._parcel_repository,
         ]
 
     @property
