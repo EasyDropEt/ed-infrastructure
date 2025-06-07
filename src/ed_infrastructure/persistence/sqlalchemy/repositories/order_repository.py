@@ -30,7 +30,8 @@ class OrderRepository(
             id=model.id,
             business=BusinessRepository._to_entity(model.business),
             consumer=ConsumerRepository._to_entity(model.consumer),
-            driver=DriverRepository._to_entity(model.driver),
+            driver=DriverRepository._to_entity(
+                model.driver) if model.driver else None,
             bill=BillRepository._to_entity(model.bill),
             parcel=ParcelRepository._to_entity(model.parcel),
             latest_time_of_delivery=model.latest_time_of_delivery,

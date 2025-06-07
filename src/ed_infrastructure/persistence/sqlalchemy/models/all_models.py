@@ -222,7 +222,8 @@ class OrderModel(BaseModel):
 
     # Relationships
     delivery_job_id: Mapped[UUID] = mapped_column(
-        ForeignKey("delivery_job.id"))
+        ForeignKey("delivery_job.id"), nullable=True
+    )
 
     business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
     business: Mapped["BusinessModel"] = relationship(
@@ -234,12 +235,10 @@ class OrderModel(BaseModel):
         "ConsumerModel", uselist=False, back_populates="orders", lazy="joined"
     )
 
-    driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
+    driver_id: Mapped[UUID] = mapped_column(
+        ForeignKey("driver.id"), nullable=True)
     driver: Mapped["DriverModel"] = relationship(
-        "DriverModel",
-        uselist=False,
-        back_populates="orders",
-        lazy="joined",  # Added back_populates to driver
+        "DriverModel", uselist=False, back_populates="orders", lazy="joined"
     )
 
     bill_id: Mapped[UUID] = mapped_column(ForeignKey("bill.id"))
