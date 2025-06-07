@@ -33,8 +33,10 @@ def _get_env_variable(name: str) -> str:
     return value
 
 
-async def seed():
-    config = get_config()
+config = get_config()
+
+
+async def seed_users():
     seed_data = get_seed()
 
     print(config)
@@ -43,17 +45,12 @@ async def seed():
     await uow.create_tables()
 
     async with uow.transaction():
-        created_users = await uow.auth_user_repository.create_many(
-            seed_data["auth_users"]
-        )
-
-        for user in created_users:
-            print("CREATED:", user)
+        for user in seed_data["auth_users"]:
+            created_user = await uow.auth_user_repository.create(user)
+            print("CREATED:", created_user)
 
 
 async def get_auth_users():
-    config = get_config()
-
     print(config)
     uow = UnitOfWork(config)
 
@@ -64,7 +61,17 @@ async def get_auth_users():
             print(user)
 
 
+async def create_otps():
+    print(config)
+    otp = get_seed()["otps"][0]
+
+    uow = UnitOfWork(config)
+    async with uow.transaction():
+        otp = await uow.otp_repository.create(otp)
+        print(otp.user_id)
+
+
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(seed())
+    asyncio.run(seed_users())

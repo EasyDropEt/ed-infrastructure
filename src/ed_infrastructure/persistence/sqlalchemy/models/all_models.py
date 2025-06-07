@@ -29,10 +29,14 @@ class AuthUserModel(BaseModel):
     phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
+    # One-to-many: AuthUser has many Notifications
     notifications: Mapped[list["NotificationModel"]] = relationship(
-        back_populates="user"
+        back_populates="user", lazy="selectin"
     )
-    otps: Mapped[list["OtpModel"]] = relationship(back_populates="user")
+    # One-to-many: AuthUser has many Otps
+    otps: Mapped[list["OtpModel"]] = relationship(
+        back_populates="user", lazy="selectin"
+    )
 
 
 class AdminModel(BaseModel):
@@ -47,8 +51,10 @@ class AdminModel(BaseModel):
     email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped[AuthUserModel] = relationship("AuthUserModel", uselist=False)
+    # Many-to-one: Admin belongs to one AuthUser
+    user: Mapped[AuthUserModel] = relationship(
+        "AuthUserModel", uselist=False, lazy="joined"
+    )
 
 
 class BillModel(BaseModel):
@@ -62,8 +68,9 @@ class BillModel(BaseModel):
 
     # Relationship
     order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
+    # Many-to-one: Bill belongs to one Order
     order: Mapped["OrderModel"] = relationship(
-        "OrderModel", uselist=False, back_populates="bill"
+        "OrderModel", uselist=False, back_populates="bill", lazy="joined"
     )
 
 
@@ -78,15 +85,20 @@ class BusinessModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    # Many-to-one: Business belongs to one AuthUser
     user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False)
+        "AuthUserModel", uselist=False, lazy="joined"
+    )
 
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
+    # Many-to-one: Business has one Location
     location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False)
+        "LocationModel", uselist=False, lazy="joined"
+    )
 
+    # One-to-many: Business has many Orders
     orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="business"
+        "OrderModel", back_populates="business", lazy="selectin"
     )
 
 
@@ -103,8 +115,9 @@ class CarModel(BaseModel):
 
     # Relationships
     driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
+    # Many-to-one: Car belongs to one Driver (assuming a driver has only one car)
     driver: Mapped["DriverModel"] = relationship(
-        "DriverModel", uselist=False, back_populates="car"
+        "DriverModel", uselist=False, back_populates="car", lazy="joined"
     )
 
 
@@ -124,14 +137,17 @@ class ConsumerModel(BaseModel):
     )
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    # Many-to-one: Consumer belongs to one AuthUser
     user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False)
-    location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
+        "AuthUserModel", uselist=False, lazy="joined"
+    )
+    # Many-to-one: Consumer has one Location
     location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False)
+        "LocationModel", uselist=False, lazy="joined"
+    )
+    # One-to-many: Consumer has many Orders
     orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="consumer"
+        "OrderModel", back_populates="consumer", lazy="selectin"
     )
 
 
@@ -152,11 +168,13 @@ class DeliveryJobModel(BaseModel):
 
     # Relationships
     driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
+    # Many-to-one: DeliveryJob belongs to one Driver
     driver: Mapped["DriverModel"] = relationship(
-        uselist=False, back_populates="delivery_jobs"
+        uselist=False, back_populates="delivery_jobs", lazy="joined"
     )
+    # One-to-many: DeliveryJob has many Waypoints
     waypoints: Mapped[list["WaypointModel"]] = relationship(
-        back_populates="delivery_job"
+        back_populates="delivery_job", lazy="selectin"
     )
 
 
@@ -172,22 +190,28 @@ class DriverModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    # Many-to-one: Driver belongs to one AuthUser
     user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False)
+        "AuthUserModel", uselist=False, lazy="joined"
+    )
 
     current_location_id: Mapped[UUID] = mapped_column(
         ForeignKey("location.id"))
+    # Many-to-one: Driver has one current Location
     current_location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False
+        "LocationModel", uselist=False, lazy="joined"
     )
+    # One-to-one: Driver has one Car
     car: Mapped["CarModel"] = relationship(
-        "CarModel", uselist=False, back_populates="driver"
+        "CarModel", uselist=False, back_populates="driver", lazy="joined"
     )
+    # One-to-many: Driver has many Orders
     orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="driver"
+        "OrderModel", back_populates="driver", lazy="selectin"
     )
+    # One-to-many: Driver has many DeliveryJobs
     delivery_jobs: Mapped[list["DeliveryJobModel"]] = relationship(
-        "DeliveryJobModel", back_populates="driver"
+        "DeliveryJobModel", back_populates="driver", lazy="selectin"
     )
 
 
@@ -218,9 +242,9 @@ class NotificationModel(BaseModel):
     read_status: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    # Many-to-one: Notification belongs to one AuthUser
     user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False, back_populates="notifications"
+        "AuthUserModel", uselist=False, back_populates="notifications", lazy="joined"
     )
 
 
@@ -235,21 +259,31 @@ class OrderModel(BaseModel):
 
     # Relationships
     business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
+    # Many-to-one: Order belongs to one Business
     business: Mapped["BusinessModel"] = relationship(
-        "BusinessModel", uselist=False, back_populates="orders"
+        "BusinessModel", uselist=False, back_populates="orders", lazy="joined"
     )
     consumer_id: Mapped[UUID] = mapped_column(ForeignKey("consumer.id"))
+    # Many-to-one: Order belongs to one Consumer
     consumer: Mapped["ConsumerModel"] = relationship(
-        "ConsumerModel", uselist=False, back_populates="orders"
+        "ConsumerModel", uselist=False, back_populates="orders", lazy="joined"
     )
+    # One-to-one: Order has one Bill
     bill: Mapped["BillModel"] = relationship(
-        "BillModel", uselist=False, back_populates="order"
+        "BillModel", uselist=False, back_populates="order", lazy="joined"
     )
+    # One-to-one: Order has one Parcel
     parcel: Mapped["ParcelModel"] = relationship(
-        "ParcelModel", uselist=False, back_populates="order"
+        "ParcelModel", uselist=False, back_populates="order", lazy="joined"
     )
     driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
-    driver: Mapped["DriverModel"] = relationship("DriverModel", uselist=False)
+    # Many-to-one: Order belongs to one Driver
+    driver: Mapped["DriverModel"] = relationship(
+        "DriverModel",
+        uselist=False,
+        back_populates="orders",
+        lazy="joined",  # Added back_populates to driver
+    )
 
 
 class OtpModel(BaseModel):
@@ -262,9 +296,10 @@ class OtpModel(BaseModel):
     )
 
     # Relationship
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False, back_populates="otps"
+    user_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("auth_user.id"))
+    # Many-to-one: Otp belongs to one AuthUser
+    user: Mapped["AuthUserModel"] = relationship(  # Added this relationship
+        "AuthUserModel", uselist=False, back_populates="otps", lazy="joined"
     )
 
 
@@ -280,8 +315,9 @@ class ParcelModel(BaseModel):
 
     # Relationship
     order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
+    # Many-to-one: Parcel belongs to one Order
     order: Mapped["OrderModel"] = relationship(
-        "OrderModel", uselist=False, back_populates="parcel"
+        "OrderModel", uselist=False, back_populates="parcel", lazy="joined"
     )
 
 
@@ -299,10 +335,14 @@ class WaypointModel(BaseModel):
 
     # Relationships
     order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
-    order: Mapped["OrderModel"] = relationship("OrderModel", uselist=False)
+    # Many-to-one: Waypoint belongs to one Order
+    order: Mapped["OrderModel"] = relationship(
+        "OrderModel", uselist=False, lazy="joined"
+    )
 
     delivery_job_id: Mapped[UUID] = mapped_column(
         ForeignKey("delivery_job.id"))
+    # Many-to-one: Waypoint belongs to one DeliveryJob
     delivery_job: Mapped["DeliveryJobModel"] = relationship(
-        "DeliveryJobModel", uselist=False, back_populates="waypoints"
+        "DeliveryJobModel", uselist=False, back_populates="waypoints", lazy="joined"
     )

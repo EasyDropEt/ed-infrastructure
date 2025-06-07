@@ -1,17 +1,33 @@
 from datetime import UTC, datetime
 from typing import TypedDict
+from uuid import UUID
 
 from ed_domain.core.aggregate_roots import AuthUser
+from ed_domain.core.entities.otp import Otp, OtpType
 
 from ed_infrastructure.common.generic import get_new_id
 
 
 class Seed(TypedDict):
+    otps: list[Otp]
     auth_users: list[AuthUser]
 
 
 def get_seed():
     seed_data: Seed = {
+        "otps": [
+            Otp(
+                user_id=UUID("620ca27b-c0f9-44a8-b44a-b0a91601b5fe"),
+                value="1010",
+                otp_type=OtpType.VERIFY_EMAIL,
+                expiry_datetime=datetime.now(UTC),
+                id=get_new_id(),
+                create_datetime=datetime.now(UTC),
+                update_datetime=datetime.now(UTC),
+                deleted_datetime=datetime.now(UTC),
+                deleted=False,
+            )
+        ],
         "auth_users": [
             AuthUser(
                 id=get_new_id(),
@@ -55,7 +71,7 @@ def get_seed():
                 deleted_datetime=datetime.now(UTC),
                 deleted=False,
             ),
-        ]
+        ],
     }
 
     return seed_data

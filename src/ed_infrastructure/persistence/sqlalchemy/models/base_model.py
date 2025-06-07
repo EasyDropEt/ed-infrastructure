@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import Boolean, DateTime, Uuid
@@ -15,6 +16,6 @@ class BaseModel(DeclarativeBase):
     )
     deleted: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False)
-    deleted_datetime: Mapped[datetime | None] = mapped_column(
+    deleted_datetime: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
