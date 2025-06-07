@@ -67,4 +67,4 @@ async def get_auth_users():
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(get_auth_users())
+    asyncio.run(seed())

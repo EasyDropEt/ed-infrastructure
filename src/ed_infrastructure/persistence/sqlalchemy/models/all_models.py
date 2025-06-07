@@ -3,11 +3,12 @@ from uuid import UUID
 
 from ed_domain.core.aggregate_roots.delivery_job import DeliveryJobStatus
 from ed_domain.core.aggregate_roots.order import OrderStatus
+from ed_domain.core.aggregate_roots.waypoint import (WaypointStatus,
+                                                     WaypointType)
 from ed_domain.core.entities.bill import BillStatus
 from ed_domain.core.entities.notification import NotificationType
 from ed_domain.core.entities.otp import OtpType
 from ed_domain.core.entities.parcel import ParcelSize
-from ed_domain.core.entities.waypoint import WaypointStatus, WaypointType
 from sqlalchemy import (Boolean, DateTime, Double, Enum, Float, ForeignKey,
                         Integer, String, Uuid)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
