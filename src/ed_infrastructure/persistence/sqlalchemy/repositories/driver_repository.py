@@ -5,6 +5,10 @@ from ed_domain.persistence.async_repositories.abc_async_driver_repository import
 from ed_infrastructure.persistence.sqlalchemy.models import DriverModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
+from src.ed_infrastructure.persistence.mongo_db.repositories.car_repository import \
+    CarRepository
+from src.ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \
+    LocationRepository
 
 
 class DriverRepository(
@@ -22,9 +26,11 @@ class DriverRepository(
             last_name=model.last_name,
             profile_image=model.profile_image,
             phone_number=model.phone_number,
-            current_location=model.current_location,
-            residence_location=model.current_location,
-            car=model.car,
+            current_location=LocationRepository._to_entity(
+                model.current_location),
+            residence_location=LocationRepository._to_entity(
+                model.current_location),
+            car=CarRepository._to_entity(model.car),
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,
             deleted=model.deleted,

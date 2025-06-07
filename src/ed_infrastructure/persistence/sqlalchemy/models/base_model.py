@@ -15,4 +15,6 @@ class BaseModel(DeclarativeBase):
     )
     deleted: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False)
-    deleted_datetime: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    deleted_datetime: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )

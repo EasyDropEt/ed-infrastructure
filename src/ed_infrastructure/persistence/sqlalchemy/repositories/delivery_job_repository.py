@@ -21,7 +21,9 @@ class DeliveryJobRepository(
         return DeliveryJob(
             id=model.id,
             driver_id=model.driver.id,
-            waypoints=model.waypoints,
+            waypoints=[
+                WaypointRepository._to_entity(model) for model in model.waypoints
+            ],
             estimated_completion_time=model.estimated_completion_time,
             estimated_distance_in_kms=model.estimated_distance_in_kms,
             estimated_payment_in_birr=model.estimated_payment_in_birr,
@@ -38,9 +40,6 @@ class DeliveryJobRepository(
         return DeliveryJobModel(
             id=entity.id,
             driver_id=entity.driver_id,
-            waypoints=[
-                WaypointRepository._to_model(waypoint) for waypoint in entity.waypoints
-            ],
             estimated_completion_time=entity.estimated_completion_time,
             estimated_distance_in_kms=entity.estimated_distance_in_kms,
             estimated_payment_in_birr=entity.estimated_payment_in_birr,
