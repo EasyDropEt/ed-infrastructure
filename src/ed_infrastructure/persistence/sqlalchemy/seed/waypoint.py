@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from uuid import UUID
 
 from ed_domain.core.aggregate_roots import Order, Waypoint
 from ed_domain.core.aggregate_roots.waypoint import (WaypointStatus,
@@ -7,8 +8,9 @@ from ed_domain.core.aggregate_roots.waypoint import (WaypointStatus,
 from ed_infrastructure.common.generic import get_new_id
 
 
-def get_waypoint(sequence: int, order: Order) -> Waypoint:
+def get_waypoint(delivery_job_id: UUID, sequence: int, order: Order) -> Waypoint:
     return Waypoint(
+        delivery_job_id=delivery_job_id,
         id=get_new_id(),
         order=order,
         expected_arrival_time=datetime.now(UTC) + timedelta(days=2),

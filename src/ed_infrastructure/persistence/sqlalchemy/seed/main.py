@@ -1,9 +1,4 @@
-from typing import TypedDict
-
-from ed_domain.core.aggregate_roots import (AuthUser, Business, Consumer,
-                                            DeliveryJob, Driver)
-from ed_domain.core.entities import Car, Location
-
+from ed_infrastructure.persistence.sqlalchemy.seed.api_key import get_api_key
 from ed_infrastructure.persistence.sqlalchemy.seed.auth_users import (
     get_business_auth_user, get_consumer_auth_user, get_driver_auth_user)
 from ed_infrastructure.persistence.sqlalchemy.seed.bill import get_bill
@@ -18,16 +13,6 @@ from ed_infrastructure.persistence.sqlalchemy.seed.order import get_order
 from ed_infrastructure.persistence.sqlalchemy.seed.parcel import get_parcel
 from ed_infrastructure.persistence.sqlalchemy.seed.waypoint import get_waypoint
 from ed_infrastructure.persistence.sqlalchemy.unit_of_work import UnitOfWork
-
-
-class Seed(TypedDict):
-    auth_users: list[AuthUser]
-    business: Business
-    driver: Driver
-    consumer: Consumer
-    location: Location
-    car: Car
-    delivery_job: DeliveryJob
 
 
 async def async_seed(uow: UnitOfWork) -> None:
@@ -55,8 +40,11 @@ async def async_seed(uow: UnitOfWork) -> None:
 
         print("Creating businesss...")
         business = await uow.business_repository.create(
-            get_business(business_auth_user.id, location)
+            get_business(business_auth_user.id, location, [])
         )
+
+        print("Creating api_key...")
+        api_key = await uow.api_key_repository.create(get_api_key(business.id))
 
         print("Creating cars...")
         car = await uow.car_repository.create(get_car())
@@ -77,12 +65,14 @@ async def async_seed(uow: UnitOfWork) -> None:
             get_order(business, consumer, driver, bill, parcel)
         )
 
-        print("Creating waypoints...")
-        waypoint = await uow.waypoint_repository.create(get_waypoint(1, order))
-
         print("Creating delivery_jobs...")
         delivery_job = await uow.delivery_job_repository.create(
-            get_delivery_job(driver.id, [waypoint])
+            get_delivery_job(driver.id, [])
+        )
+
+        print("Creating waypoints...")
+        waypoint = await uow.waypoint_repository.create(
+            get_waypoint(delivery_job.id, 1, order)
         )
 
         print(delivery_job.__dict__)

@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from ed_domain.persistence.async_repositories import (
-    ABCAsyncAuthUserRepository, ABCAsyncBillRepository,
-    ABCAsyncBusinessRepository, ABCAsyncCarRepository,
+    ABCAsyncApiKeyRepository, ABCAsyncAuthUserRepository,
+    ABCAsyncBillRepository, ABCAsyncBusinessRepository, ABCAsyncCarRepository,
     ABCAsyncConsumerRepository, ABCAsyncDeliveryJobRepository,
     ABCAsyncDriverRepository, ABCAsyncLocationRepository,
     ABCAsyncNotificationRepository, ABCAsyncOrderRepository,
@@ -19,10 +19,11 @@ from ed_infrastructure.persistence.sqlalchemy.db_engine import (DbConfig,
 from ed_infrastructure.persistence.sqlalchemy.db_session import DbSession
 from ed_infrastructure.persistence.sqlalchemy.models import BaseModel
 from ed_infrastructure.persistence.sqlalchemy.repositories import (
-    AdminRepository, AuthUserRepository, BillRepository, BusinessRepository,
-    CarRepository, ConsumerRepository, DeliveryJobRepository, DriverRepository,
-    LocationRepository, NotificationRepository, OrderRepository, OtpRepository,
-    ParcelRepository, WaypointRepository)
+    AdminRepository, ApiKeyRepository, AuthUserRepository, BillRepository,
+    BusinessRepository, CarRepository, ConsumerRepository,
+    DeliveryJobRepository, DriverRepository, LocationRepository,
+    NotificationRepository, OrderRepository, OtpRepository, ParcelRepository,
+    WaypointRepository)
 
 
 class UnitOfWork(ABCAsyncUnitOfWork):
@@ -72,6 +73,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
         self._order_repository = OrderRepository()
         self._parcel_repository = ParcelRepository()
         self._waypoint_repository = WaypointRepository()
+        self._api_key_repository = ApiKeyRepository()
 
         self._repositories = [
             self._admin_repository,
@@ -88,6 +90,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
             self._order_repository,
             self._waypoint_repository,
             self._parcel_repository,
+            self._api_key_repository,
         ]
 
     @property
@@ -137,6 +140,10 @@ class UnitOfWork(ABCAsyncUnitOfWork):
     @property
     def waypoint_repository(self) -> ABCAsyncWaypointRepository:
         return self._waypoint_repository
+
+    @property
+    def api_key_repository(self) -> ABCAsyncApiKeyRepository:
+        return self._api_key_repository
 
     @property
     def parcel_repository(self) -> ABCAsyncParcelRepository:

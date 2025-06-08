@@ -5,6 +5,7 @@ from ed_domain.core.aggregate_roots.delivery_job import DeliveryJobStatus
 from ed_domain.core.aggregate_roots.order import OrderStatus
 from ed_domain.core.aggregate_roots.waypoint import (WaypointStatus,
                                                      WaypointType)
+from ed_domain.core.entities.api_key import ApiKeyStatus
 from ed_domain.core.entities.bill import BillStatus
 from ed_domain.core.entities.notification import NotificationType
 from ed_domain.core.entities.otp import OtpType
@@ -15,6 +16,32 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ed_infrastructure.persistence.sqlalchemy.models.base_model import \
     BaseModel
+
+
+class ApiKeyModel(BaseModel):
+    __tablename__ = "api_key"
+
+    name: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String)
+    prefix: Mapped[str] = mapped_column(String)
+    key_hash: Mapped[str] = mapped_column(String)
+    status: Mapped[ApiKeyStatus] = mapped_column(Enum(ApiKeyStatus))
+
+    # Relationships
+    business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
+
+
+class AdminModel(BaseModel):
+    __tablename__ = "admin"
+
+    first_name: Mapped[str] = mapped_column(String, nullable=False)
+    last_name: Mapped[str] = mapped_column(String, nullable=False)
+    phone_number: Mapped[str] = mapped_column(String, nullable=False)
+    email: Mapped[str] = mapped_column(String, nullable=False)
+
+    # Relationships
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
 
 
 class AuthUserModel(BaseModel):
@@ -32,19 +59,6 @@ class AuthUserModel(BaseModel):
     notifications: Mapped[list["NotificationModel"]
                           ] = relationship(lazy="selectin")
     otps: Mapped[list["OtpModel"]] = relationship(lazy="selectin")
-
-
-class AdminModel(BaseModel):
-    __tablename__ = "admin"
-
-    first_name: Mapped[str] = mapped_column(String, nullable=False)
-    last_name: Mapped[str] = mapped_column(String, nullable=False)
-    phone_number: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(String, nullable=False)
-
-    # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
 
 
 class BillModel(BaseModel):
@@ -82,6 +96,8 @@ class BusinessModel(BaseModel):
     orders: Mapped[list["OrderModel"]] = relationship(
         back_populates="business", lazy="selectin"
     )
+
+    api_keys: Mapped[list["ApiKeyModel"]] = relationship(lazy="selectin")
 
 
 class CarModel(BaseModel):
@@ -146,9 +162,7 @@ class DeliveryJobModel(BaseModel):
         uselist=False, back_populates="delivery_jobs", lazy="joined"
     )
 
-    waypoints: Mapped[list["WaypointModel"]] = relationship(
-        back_populates="delivery_job", lazy="selectin"
-    )
+    waypoints: Mapped[list["WaypointModel"]] = relationship(lazy="selectin")
 
 
 class DriverModel(BaseModel):
@@ -159,7 +173,7 @@ class DriverModel(BaseModel):
     profile_image: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
     available: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    email: Mapped[str | None] = mapped_column(String, nullable=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=False)
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
@@ -299,8 +313,4 @@ class WaypointModel(BaseModel):
     )
 
     delivery_job_id: Mapped[UUID] = mapped_column(
-        ForeignKey("delivery_job.id"), nullable=True
-    )
-    delivery_job: Mapped["DeliveryJobModel"] = relationship(
-        "DeliveryJobModel", uselist=False, back_populates="waypoints", lazy="joined"
-    )
+        ForeignKey("delivery_job.id"))

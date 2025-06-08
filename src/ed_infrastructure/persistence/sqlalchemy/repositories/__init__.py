@@ -1,5 +1,7 @@
 from ed_infrastructure.persistence.sqlalchemy.repositories.admin_repository import \
     AdminRepository
+from ed_infrastructure.persistence.sqlalchemy.repositories.api_key_repository import \
+    ApiKeyRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.auth_user_repository import \
     AuthUserRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.bill_repository import \
@@ -28,6 +30,7 @@ from ed_infrastructure.persistence.sqlalchemy.repositories.waypoint_repository i
     WaypointRepository
 
 __all__ = [
+    "ApiKeyRepository",
     "AdminRepository",
     "AuthUserRepository",
     "BillRepository",

@@ -3,6 +3,8 @@ from ed_domain.persistence.async_repositories.abc_async_business_repository impo
     ABCAsyncBusinessRepository
 
 from ed_infrastructure.persistence.sqlalchemy.models import BusinessModel
+from ed_infrastructure.persistence.sqlalchemy.repositories.api_key_repository import \
+    ApiKeyRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \
@@ -25,6 +27,9 @@ class BusinessRepository(
             owner_last_name=model.owner_last_name,
             phone_number=model.phone_number,
             email=model.email,
+            api_keys=[
+                ApiKeyRepository._to_entity(api_key) for api_key in model.api_keys
+            ],
             location=LocationRepository._to_entity(model.location),
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,
@@ -42,6 +47,7 @@ class BusinessRepository(
             owner_last_name=entity.owner_last_name,
             phone_number=entity.phone_number,
             email=entity.email,
+            api_keys=entity.api_keys,
             location_id=entity.location.id,
             create_datetime=entity.create_datetime,
             update_datetime=entity.update_datetime,

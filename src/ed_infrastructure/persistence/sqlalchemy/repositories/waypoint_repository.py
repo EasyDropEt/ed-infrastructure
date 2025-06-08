@@ -34,6 +34,7 @@ class WaypointRepository(
     def _to_entity(cls, model: WaypointModel) -> Waypoint:
         return Waypoint(
             id=model.id,
+            delivery_job_id=model.delivery_job_id,
             order=OrderRepository._to_entity(model.order),
             expected_arrival_time=model.expected_arrival_time,
             actual_arrival_time=model.actual_arrival_time,
@@ -50,6 +51,7 @@ class WaypointRepository(
     def _to_model(cls, entity: Waypoint) -> WaypointModel:
         return WaypointModel(
             id=entity.id,
+            delivery_job_id=entity.delivery_job_id,
             order_id=entity.order.id,
             expected_arrival_time=entity.expected_arrival_time,
             actual_arrival_time=entity.actual_arrival_time,

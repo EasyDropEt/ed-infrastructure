@@ -11,7 +11,7 @@ def get_business_auth_user() -> AuthUser:
         id=get_new_id(),
         first_name="Shamil",
         last_name="Bedru",
-        phone_number="251977346620",
+        phone_number="251948671563",
         email="shamilbedru47@gmail.com",
         password_hash="$2b$12$mlewRx4nfy7FKCB.RJrVs.N.CD95q3DBBDr6zqxtOzQoBvQjnzFK6",
         verified=True,

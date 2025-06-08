@@ -1,11 +1,12 @@
 from ed_infrastructure.persistence.sqlalchemy.models.all_models import (
-    AdminModel, AuthUserModel, BillModel, BusinessModel, CarModel,
+    AdminModel, ApiKeyModel, AuthUserModel, BillModel, BusinessModel, CarModel,
     ConsumerModel, DeliveryJobModel, DriverModel, LocationModel,
     NotificationModel, OrderModel, OtpModel, ParcelModel, WaypointModel)
 from ed_infrastructure.persistence.sqlalchemy.models.base_model import \
     BaseModel
 
 __all__ = [
+    "ApiKeyModel",
     "BaseModel",
     "LocationModel",
     "CarModel",
