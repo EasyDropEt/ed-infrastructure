@@ -36,6 +36,12 @@ def _get_env_variable(name: str) -> str:
 config = get_config()
 
 
+async def create_empty_tables():
+    uow = UnitOfWork(config)
+
+    await uow.create_tables()
+
+
 async def seed_users():
     seed_data = get_seed()
 
@@ -74,4 +80,4 @@ async def create_otps():
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(seed_users())
+    asyncio.run(create_empty_tables())
