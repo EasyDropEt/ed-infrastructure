@@ -38,7 +38,7 @@ class WaypointRepository(
             expected_arrival_time=model.expected_arrival_time,
             actual_arrival_time=model.actual_arrival_time,
             sequence=model.sequence,
-            waypoint_type=model.type,
+            waypoint_type=model.waypoint_type,
             waypoint_status=model.waypoint_status,
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,
