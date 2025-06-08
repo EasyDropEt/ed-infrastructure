@@ -285,8 +285,9 @@ class WaypointModel(BaseModel):
         DateTime(timezone=True), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
-    type: Mapped[WaypointType] = mapped_column(
-        Enum(WaypointType), nullable=False)
+    waypoint_type: Mapped[WaypointType] = mapped_column(
+        Enum(WaypointType), nullable=False
+    )
     waypoint_status: Mapped[WaypointStatus] = mapped_column(
         Enum(WaypointStatus), nullable=False
     )
@@ -298,7 +299,8 @@ class WaypointModel(BaseModel):
     )
 
     delivery_job_id: Mapped[UUID] = mapped_column(
-        ForeignKey("delivery_job.id"))
+        ForeignKey("delivery_job.id"), nullable=True
+    )
     delivery_job: Mapped["DeliveryJobModel"] = relationship(
         "DeliveryJobModel", uselist=False, back_populates="waypoints", lazy="joined"
     )
