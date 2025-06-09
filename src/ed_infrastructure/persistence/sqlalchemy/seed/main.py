@@ -19,6 +19,7 @@ from ed_infrastructure.persistence.sqlalchemy.unit_of_work import UnitOfWork
 
 
 async def async_seed(uow: UnitOfWork) -> None:
+    await uow.create_tables()
     async with uow.transaction():
         print("Creating driver_auth_users...")
         driver_auth_user = await uow.auth_user_repository.create(get_driver_auth_user())
@@ -65,7 +66,7 @@ async def async_seed(uow: UnitOfWork) -> None:
 
         print("Creating orders...")
         order = await uow.order_repository.create(
-            get_order(business, consumer, driver, bill, parcel)
+            get_order(business.id, consumer.id, driver.id, bill, parcel)
         )
 
         print("Creating delivery_jobs...")
@@ -147,7 +148,7 @@ async def seed_delivery_job(uow: UnitOfWork) -> list[Order]:
 
             print(f"Creating order {sequence}...")
             order = await uow.order_repository.create(
-                get_order(business, consumer, None, bill, parcel)
+                get_order(business.id, consumer.id, None, bill, parcel)
             )
             waypoint_1 = await uow.waypoint_repository.create(
                 get_waypoint(

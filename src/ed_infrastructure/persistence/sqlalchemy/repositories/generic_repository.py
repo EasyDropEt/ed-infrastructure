@@ -72,7 +72,6 @@ class AsyncGenericRepository(
         return [self._to_entity(model) for model in models]
 
     async def update(self, id: UUID, entity: TEntity) -> bool:
-        # Get the primary key attribute name (assuming it's named 'id')
         model = self._to_model(entity)
         stmt = (
             update(self._entity_cls)
@@ -100,3 +99,12 @@ class AsyncGenericRepository(
         )
         result = await self._session.execute(stmt)
         return bool(result.scalar_one_or_none())
+
+    async def save(self, entity: TEntity) -> TEntity:
+        orm_model = self._to_model(entity)
+
+        merged_model = await self._session.merge(orm_model)
+
+        merged_entity = self._to_entity(merged_model)
+
+        return merged_entity

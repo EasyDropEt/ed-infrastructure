@@ -19,11 +19,10 @@ class DriverRepository(
         self._car_repository = CarRepository()
 
     async def update(self, id: UUID, entity: Driver) -> bool:
-        bill_updated = await self._car_repository.update(entity.car.id, entity.car)
-
+        car_updated = await self._car_repository.update(entity.car.id, entity.car)
         driver_updated = await self.update(id, entity)
 
-        return bill_updated or driver_updated
+        return car_updated or driver_updated
 
     @classmethod
     def _to_entity(cls, model: DriverModel) -> Driver:
@@ -52,7 +51,7 @@ class DriverRepository(
             last_name=entity.last_name,
             profile_image=entity.profile_image,
             phone_number=entity.phone_number,
-            current_location_id=entity.location_id,
+            location_id=entity.location_id,
             car_id=entity.car.id,
             available=entity.available,
             email=entity.email,

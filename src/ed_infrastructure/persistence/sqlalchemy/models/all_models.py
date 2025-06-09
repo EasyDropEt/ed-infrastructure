@@ -28,7 +28,8 @@ class ApiKeyModel(BaseModel):
     status: Mapped[ApiKeyStatus] = mapped_column(Enum(ApiKeyStatus))
 
     # Relationships
-    business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
+    business_id: Mapped[UUID] = mapped_column(
+        ForeignKey("business.id"), index=True)
 
 
 class AdminModel(BaseModel):
@@ -40,7 +41,8 @@ class AdminModel(BaseModel):
     email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("auth_user.id"), index=True)
 
 
 class AuthUserModel(BaseModel):
@@ -51,8 +53,10 @@ class AuthUserModel(BaseModel):
     password_hash: Mapped[str] = mapped_column(String)
     verified: Mapped[bool] = mapped_column(Boolean)
     logged_in: Mapped[bool] = mapped_column(Boolean)
-    email: Mapped[str | None] = mapped_column(String, nullable=True)
-    phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    email: Mapped[str | None] = mapped_column(
+        String, nullable=True, index=True)
+    phone_number: Mapped[str | None] = mapped_column(
+        String, nullable=True, index=True)
 
     # Relationships
     ...
@@ -83,7 +87,8 @@ class BusinessModel(BaseModel):
     email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("auth_user.id"), index=True)
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
     api_keys: Mapped[list["ApiKeyModel"]] = relationship(lazy="selectin")
 
@@ -115,7 +120,8 @@ class ConsumerModel(BaseModel):
     email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("auth_user.id"), index=True)
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
 
 
@@ -151,8 +157,11 @@ class DriverModel(BaseModel):
     email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("auth_user.id"), index=True)
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
+
+    car_id: Mapped[UUID] = mapped_column(ForeignKey("car.id"))
     car: Mapped["CarModel"] = relationship(
         "CarModel", uselist=False, back_populates="driver", lazy="joined"
     )
@@ -175,7 +184,8 @@ class LocationModel(BaseModel):
 class NotificationModel(BaseModel):
     __tablename__ = "notification"
 
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("auth_user.id"), index=True)
     notification_type: Mapped[NotificationType] = mapped_column(
         Enum(NotificationType), nullable=False
     )
@@ -206,10 +216,11 @@ class OrderModel(BaseModel):
     )
 
     # Relationships
-    business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
+    business_id: Mapped[UUID] = mapped_column(
+        ForeignKey("business.id"), index=True)
     consumer_id: Mapped[UUID] = mapped_column(ForeignKey("consumer.id"))
     delivery_job_id: Mapped[UUID] = mapped_column(
-        ForeignKey("delivery_job.id"), nullable=True
+        ForeignKey("delivery_job.id"), nullable=True, index=True
     )
 
     driver_id: Mapped[UUID] = mapped_column(
@@ -246,7 +257,9 @@ class ParcelModel(BaseModel):
     fragile: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
     # Relationships
-    ...
+    order: Mapped["OrderModel"] = relationship(
+        uselist=False, back_populates="parcel", lazy="joined"
+    )
 
 
 class WaypointModel(BaseModel):
@@ -267,6 +280,6 @@ class WaypointModel(BaseModel):
     )
 
     # Relationships
-    order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
+    order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"), index=True)
     delivery_job_id: Mapped[UUID] = mapped_column(
         ForeignKey("delivery_job.id"))
