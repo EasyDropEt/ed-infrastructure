@@ -141,7 +141,8 @@ class DeliveryJobModel(BaseModel):
         String(50), nullable=False)
 
     # Relationships
-    driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
+    driver_id: Mapped[UUID] = mapped_column(
+        ForeignKey("driver.id"), nullable=True)
 
     waypoints: Mapped[list["WaypointModel"]] = relationship(lazy="selectin")
 
