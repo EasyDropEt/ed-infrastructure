@@ -58,7 +58,6 @@ class BusinessRepository(
             owner_last_name=entity.owner_last_name,
             phone_number=entity.phone_number,
             email=entity.email,
-            api_keys=entity.api_keys,
             location_id=entity.location_id,
             create_datetime=entity.create_datetime,
             update_datetime=entity.update_datetime,
