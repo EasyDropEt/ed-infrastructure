@@ -1,15 +1,15 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from ed_domain.core.aggregate_roots.delivery_job import DeliveryJobStatus
 from ed_domain.core.aggregate_roots.order import OrderStatus
-from ed_domain.core.aggregate_roots.waypoint import (WaypointStatus,
-                                                     WaypointType)
 from ed_domain.core.entities.api_key import ApiKeyStatus
 from ed_domain.core.entities.bill import BillStatus
 from ed_domain.core.entities.notification import NotificationType
 from ed_domain.core.entities.otp import OtpType
 from ed_domain.core.entities.parcel import ParcelSize
+from ed_domain.core.entities.waypoint import WaypointStatus, WaypointType
 from sqlalchemy import (Boolean, DateTime, Double, Enum, Float, ForeignKey,
                         Integer, String)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -41,7 +41,6 @@ class AdminModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
 
 
 class AuthUserModel(BaseModel):
@@ -56,9 +55,7 @@ class AuthUserModel(BaseModel):
     phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
-    notifications: Mapped[list["NotificationModel"]
-                          ] = relationship(lazy="selectin")
-    otps: Mapped[list["OtpModel"]] = relationship(lazy="selectin")
+    ...
 
 
 class BillModel(BaseModel):
@@ -87,16 +84,7 @@ class BusinessModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(uselist=False, lazy="joined")
-
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
-    location: Mapped["LocationModel"] = relationship(
-        uselist=False, lazy="joined")
-
-    orders: Mapped[list["OrderModel"]] = relationship(
-        back_populates="business", lazy="selectin"
-    )
-
     api_keys: Mapped[list["ApiKeyModel"]] = relationship(lazy="selectin")
 
 
@@ -128,17 +116,7 @@ class ConsumerModel(BaseModel):
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False, lazy="joined"
-    )
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
-    location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False, lazy="joined"
-    )
-
-    orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="consumer", lazy="selectin"
-    )
 
 
 class DeliveryJobModel(BaseModel):
@@ -158,9 +136,6 @@ class DeliveryJobModel(BaseModel):
 
     # Relationships
     driver_id: Mapped[UUID] = mapped_column(ForeignKey("driver.id"))
-    driver: Mapped["DriverModel"] = relationship(
-        uselist=False, back_populates="delivery_jobs", lazy="joined"
-    )
 
     waypoints: Mapped[list["WaypointModel"]] = relationship(lazy="selectin")
 
@@ -173,30 +148,13 @@ class DriverModel(BaseModel):
     profile_image: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
     available: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    email: Mapped[str | None] = mapped_column(String, nullable=False)
+    email: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(ForeignKey("auth_user.id"))
-    user: Mapped["AuthUserModel"] = relationship(
-        "AuthUserModel", uselist=False, lazy="joined"
-    )
-
-    current_location_id: Mapped[UUID] = mapped_column(
-        ForeignKey("location.id"))
-    current_location: Mapped["LocationModel"] = relationship(
-        "LocationModel", uselist=False, lazy="joined"
-    )
-
-    car_id: Mapped[UUID] = mapped_column(ForeignKey("car.id"))
+    location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
     car: Mapped["CarModel"] = relationship(
         "CarModel", uselist=False, back_populates="driver", lazy="joined"
-    )
-
-    orders: Mapped[list["OrderModel"]] = relationship(
-        "OrderModel", back_populates="driver", lazy="selectin"
-    )
-    delivery_jobs: Mapped[list["DeliveryJobModel"]] = relationship(
-        "DeliveryJobModel", back_populates="driver", lazy="selectin"
     )
 
 
@@ -233,27 +191,29 @@ class OrderModel(BaseModel):
     )
     order_status: Mapped[OrderStatus] = mapped_column(
         Enum(OrderStatus), nullable=False)
+    customer_rating: Mapped[int] = mapped_column(Integer, nullable=True)
+    expected_delivery_time: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    actual_delivery_time: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    picked_up_datetime: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    completed_datetime: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     # Relationships
+    business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
+    consumer_id: Mapped[UUID] = mapped_column(ForeignKey("consumer.id"))
     delivery_job_id: Mapped[UUID] = mapped_column(
         ForeignKey("delivery_job.id"), nullable=True
     )
 
-    business_id: Mapped[UUID] = mapped_column(ForeignKey("business.id"))
-    business: Mapped["BusinessModel"] = relationship(
-        "BusinessModel", uselist=False, back_populates="orders", lazy="joined"
-    )
-
-    consumer_id: Mapped[UUID] = mapped_column(ForeignKey("consumer.id"))
-    consumer: Mapped["ConsumerModel"] = relationship(
-        "ConsumerModel", uselist=False, back_populates="orders", lazy="joined"
-    )
-
     driver_id: Mapped[UUID] = mapped_column(
         ForeignKey("driver.id"), nullable=True)
-    driver: Mapped["DriverModel"] = relationship(
-        "DriverModel", uselist=False, back_populates="orders", lazy="joined"
-    )
 
     bill_id: Mapped[UUID] = mapped_column(ForeignKey("bill.id"))
     bill: Mapped["BillModel"] = relationship(
@@ -308,9 +268,5 @@ class WaypointModel(BaseModel):
 
     # Relationships
     order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"))
-    order: Mapped["OrderModel"] = relationship(
-        "OrderModel", uselist=False, lazy="joined"
-    )
-
     delivery_job_id: Mapped[UUID] = mapped_column(
         ForeignKey("delivery_job.id"))

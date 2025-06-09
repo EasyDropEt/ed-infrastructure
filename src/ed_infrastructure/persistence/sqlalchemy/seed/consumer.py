@@ -2,13 +2,12 @@ from datetime import UTC
 from uuid import UUID
 
 from ed_domain.core.aggregate_roots import Consumer
-from ed_domain.core.entities import Location
 from jsons import datetime
 
 from ed_infrastructure.common.generic import get_new_id
 
 
-def get_consumer(consumer_user_id: UUID, location: Location) -> Consumer:
+def get_consumer(consumer_user_id: UUID, location_id: UUID) -> Consumer:
     return Consumer(
         user_id=consumer_user_id,
         id=get_new_id(),
@@ -17,7 +16,7 @@ def get_consumer(consumer_user_id: UUID, location: Location) -> Consumer:
         phone_number="251930316620",
         email="phikernew0808@gmail.com",
         profile_image_url="",
-        location=location,
+        location_id=location_id,
         create_datetime=datetime.now(UTC),
         update_datetime=datetime.now(UTC),
         deleted_datetime=datetime.now(UTC),

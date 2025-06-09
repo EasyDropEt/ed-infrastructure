@@ -1,6 +1,6 @@
 from datetime import UTC
 
-from ed_domain.core.entities import Location
+from ed_domain.core.aggregate_roots import Location
 from jsons import datetime
 
 from ed_infrastructure.common.generic import get_new_id

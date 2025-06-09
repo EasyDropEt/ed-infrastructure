@@ -1,3 +1,6 @@
+from ed_domain.core.aggregate_roots import Order
+from ed_domain.core.entities.waypoint import WaypointType
+
 from ed_infrastructure.persistence.sqlalchemy.seed.api_key import get_api_key
 from ed_infrastructure.persistence.sqlalchemy.seed.auth_users import (
     get_business_auth_user, get_consumer_auth_user, get_driver_auth_user)
@@ -35,12 +38,12 @@ async def async_seed(uow: UnitOfWork) -> None:
 
         print("Creating consumers...")
         consumer = await uow.consumer_repository.create(
-            get_consumer(consumer_auth_user.id, location)
+            get_consumer(consumer_auth_user.id, location.id)
         )
 
         print("Creating businesss...")
         business = await uow.business_repository.create(
-            get_business(business_auth_user.id, location, [])
+            get_business(business_auth_user.id, location.id, [])
         )
 
         print("Creating api_key...")
@@ -51,7 +54,7 @@ async def async_seed(uow: UnitOfWork) -> None:
 
         print("Creating drivers...")
         driver = await uow.driver_repository.create(
-            get_driver(driver_auth_user.id, car, location)
+            get_driver(driver_auth_user.id, car, location.id)
         )
 
         print("Creating parcels...")
@@ -72,7 +75,7 @@ async def async_seed(uow: UnitOfWork) -> None:
 
         print("Creating waypoints...")
         waypoint = await uow.waypoint_repository.create(
-            get_waypoint(delivery_job.id, 1, order)
+            get_waypoint(delivery_job.id, 1, order.id)
         )
 
         print(delivery_job.__dict__)
@@ -123,3 +126,44 @@ async def async_get(uow: UnitOfWork) -> None:
         print("\n\nGetting delivery_jobs...")
         delivery_job = await uow.delivery_job_repository.get_all()
         print(delivery_job)
+
+
+async def seed_delivery_job(uow: UnitOfWork) -> list[Order]:
+    orders: list[Order] = []
+
+    async with uow.transaction():
+        print("Getting business, consumer, and delivery_job...")
+        business = (await uow.business_repository.get_all())[0]
+        consumer = (await uow.consumer_repository.get_all())[0]
+        delivery_job = (await uow.delivery_job_repository.get_all())[0]
+
+        sequence = 1
+        for _ in range(10):
+            print(f"Creating parcel {sequence}...")
+            parcel = await uow.parcel_repository.create(get_parcel())
+
+            print(f"Creating bill {sequence}...")
+            bill = await uow.bill_repository.create(get_bill())
+
+            print(f"Creating order {sequence}...")
+            order = await uow.order_repository.create(
+                get_order(business, consumer, None, bill, parcel)
+            )
+            waypoint_1 = await uow.waypoint_repository.create(
+                get_waypoint(
+                    delivery_job.id, sequence + 1, order.id, WaypointType.PICK_UP
+                )
+            )
+            waypoint_2 = await uow.waypoint_repository.create(
+                get_waypoint(
+                    delivery_job.id, sequence + 2, order.id, WaypointType.DROP_OFF
+                )
+            )
+
+            delivery_job.add_waypoint(waypoint_1)
+            delivery_job.add_waypoint(waypoint_2)
+            sequence += 2
+
+        print(delivery_job)
+
+    return orders

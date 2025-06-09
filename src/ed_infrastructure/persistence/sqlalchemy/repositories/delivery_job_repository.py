@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from ed_domain.core.aggregate_roots.delivery_job import DeliveryJob
 from ed_domain.persistence.async_repositories.abc_async_delivery_job_repository import \
     ABCAsyncDeliveryJobRepository
@@ -15,6 +17,17 @@ class DeliveryJobRepository(
 ):
     def __init__(self) -> None:
         super().__init__(DeliveryJobModel)
+        self._waypoint_repository = WaypointRepository()
+
+    async def update(self, id: UUID, entity: DeliveryJob) -> bool:
+        waypoints_updated = False
+        for waypoint in entity.waypoints:
+            if await self._waypoint_repository.update(waypoint.id, waypoint):
+                waypoints_updated = True
+
+        delivery_job_updated = await super().update(id, entity)
+
+        return waypoints_updated and delivery_job_updated
 
     @classmethod
     def _to_entity(cls, model: DeliveryJobModel) -> DeliveryJob:
@@ -22,7 +35,7 @@ class DeliveryJobRepository(
             id=model.id,
             driver_id=model.driver_id,
             waypoints=[
-                WaypointRepository._to_entity(model) for model in model.waypoints
+                WaypointRepository._to_entity(waypoint) for waypoint in model.waypoints
             ],
             estimated_completion_time=model.estimated_completion_time,
             estimated_distance_in_kms=model.estimated_distance_in_kms,

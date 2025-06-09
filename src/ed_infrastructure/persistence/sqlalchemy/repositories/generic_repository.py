@@ -73,13 +73,14 @@ class AsyncGenericRepository(
 
     async def update(self, id: UUID, entity: TEntity) -> bool:
         # Get the primary key attribute name (assuming it's named 'id')
+        model = self._to_model(entity)
         stmt = (
             update(self._entity_cls)
             .where(self._entity_cls.id == id)
             .values(
                 **{
                     k: v
-                    for k, v in entity.__dict__.items()
+                    for k, v in model.__dict__.items()
                     if not k.startswith("_") and k != "id"
                 }
             )

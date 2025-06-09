@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from ed_domain.core.aggregate_roots.waypoint import Waypoint, WaypointStatus
+from ed_domain.core.entities.waypoint import Waypoint, WaypointStatus
 from ed_domain.persistence.async_repositories.abc_async_waypoint_repository import \
     ABCAsyncWaypointRepository
 from sqlalchemy import update
@@ -8,8 +8,6 @@ from sqlalchemy import update
 from ed_infrastructure.persistence.sqlalchemy.models import WaypointModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
-from ed_infrastructure.persistence.sqlalchemy.repositories.order_repository import \
-    OrderRepository
 
 
 class WaypointRepository(
@@ -35,7 +33,7 @@ class WaypointRepository(
         return Waypoint(
             id=model.id,
             delivery_job_id=model.delivery_job_id,
-            order=OrderRepository._to_entity(model.order),
+            order_id=model.order_id,
             expected_arrival_time=model.expected_arrival_time,
             actual_arrival_time=model.actual_arrival_time,
             sequence=model.sequence,
@@ -52,7 +50,7 @@ class WaypointRepository(
         return WaypointModel(
             id=entity.id,
             delivery_job_id=entity.delivery_job_id,
-            order_id=entity.order.id,
+            order_id=entity.order_id,
             expected_arrival_time=entity.expected_arrival_time,
             actual_arrival_time=entity.actual_arrival_time,
             sequence=entity.sequence,

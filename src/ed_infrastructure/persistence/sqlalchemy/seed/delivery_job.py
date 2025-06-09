@@ -1,8 +1,9 @@
 from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
-from ed_domain.core.aggregate_roots import DeliveryJob, Waypoint
+from ed_domain.core.aggregate_roots import DeliveryJob
 from ed_domain.core.aggregate_roots.delivery_job import DeliveryJobStatus
+from ed_domain.core.entities.waypoint import Waypoint
 
 from ed_infrastructure.common.generic import get_new_id
 
