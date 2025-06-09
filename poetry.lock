@@ -577,13 +577,13 @@ python-dotenv = "*"
 
 [[package]]
 name = "ed-domain"
-version = "0.4.4"
+version = "0.4.6"
 description = "EasyDrop domain model Package"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "ed_domain-0.4.4-py3-none-any.whl", hash = "sha256:0a972e735a460caa91b2d480e555d570981cc5b0dbe3e6553479d6dee285b9d6"},
+    {file = "ed_domain-0.4.6-py3-none-any.whl", hash = "sha256:7abfad1c6b631fccefe86dbd3426d3829c8cce2fbe6e92219531a4c01eb4973d"},
 ]
 
 [package.extras]
@@ -2105,4 +2105,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "c50168477d17ab4be81cd3e389783050035efa12c6dbdbba13d9ec654d1df66b"
+content-hash = "0c64bb3a5d05c81a9752dbc63aa07e0671cc5538995e2967ba21246fef6f942a"
