@@ -1,9 +1,11 @@
 from ed_domain.core.aggregate_roots import Order
 from ed_domain.core.entities.waypoint import WaypointType
 
+from ed_infrastructure.persistence.sqlalchemy.seed.admin import get_admin
 from ed_infrastructure.persistence.sqlalchemy.seed.api_key import get_api_key
 from ed_infrastructure.persistence.sqlalchemy.seed.auth_users import (
-    get_business_auth_user, get_consumer_auth_user, get_driver_auth_user)
+    get_admin_auth_user, get_business_auth_user, get_consumer_auth_user,
+    get_driver_auth_user)
 from ed_infrastructure.persistence.sqlalchemy.seed.bill import get_bill
 from ed_infrastructure.persistence.sqlalchemy.seed.business import get_business
 from ed_infrastructure.persistence.sqlalchemy.seed.car import get_car
@@ -33,6 +35,12 @@ async def async_seed(uow: UnitOfWork) -> None:
         consumer_auth_user = await uow.auth_user_repository.create(
             get_consumer_auth_user()
         )
+
+        print("Creating admin_auth_users...")
+        admin_auth_user = await uow.auth_user_repository.create(get_admin_auth_user())
+
+        print("Creating admin...")
+        admin = await uow.admin_repository.create(get_admin(admin_auth_user.id))
 
         print("Creating locations...")
         location = await uow.location_repository.create(get_location())

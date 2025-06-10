@@ -36,6 +36,7 @@ class OrderRepository(
     def _to_entity(cls, model: OrderModel) -> Order:
         return Order(
             id=model.id,
+            order_number=model.order_number,
             business_id=model.business_id,
             consumer_id=model.consumer_id,
             driver_id=model.driver_id if model.driver_id else None,
@@ -53,6 +54,7 @@ class OrderRepository(
     def _to_model(cls, entity: Order) -> OrderModel:
         return OrderModel(
             id=entity.id,
+            order_number=entity.order_number,
             business_id=entity.business_id,
             consumer_id=entity.consumer_id,
             driver_id=entity.driver_id if entity.driver_id else None,

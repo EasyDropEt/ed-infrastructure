@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
+from ed_domain.core.aggregate_roots.admin import AdminRole
 from ed_domain.core.aggregate_roots.delivery_job import DeliveryJobStatus
 from ed_domain.core.aggregate_roots.order import OrderStatus
 from ed_domain.core.entities.api_key import ApiKeyStatus
@@ -39,6 +40,7 @@ class AdminModel(BaseModel):
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, nullable=False)
+    role: Mapped[AdminRole] = mapped_column(Enum(AdminRole), nullable=False)
 
     # Relationships
     user_id: Mapped[UUID] = mapped_column(
@@ -197,11 +199,13 @@ class NotificationModel(BaseModel):
 class OrderModel(BaseModel):
     __tablename__ = "order"
 
+    order_number: Mapped[str] = mapped_column(
+        String, nullable=False, index=True)
+    order_status: Mapped[OrderStatus] = mapped_column(
+        Enum(OrderStatus), nullable=False)
     latest_time_of_delivery: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
     )
-    order_status: Mapped[OrderStatus] = mapped_column(
-        Enum(OrderStatus), nullable=False)
     customer_rating: Mapped[int] = mapped_column(Integer, nullable=True)
     expected_delivery_time: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True

@@ -18,6 +18,7 @@ def get_order(
 ) -> Order:
     return Order(
         id=get_new_id(),
+        order_number=str(get_new_id()),
         business_id=business_id,
         consumer_id=consumer_id,
         driver_id=driver_id,

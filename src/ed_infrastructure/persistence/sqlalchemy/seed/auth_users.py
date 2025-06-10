@@ -23,6 +23,23 @@ def get_business_auth_user() -> AuthUser:
     )
 
 
+def get_admin_auth_user() -> AuthUser:
+    return AuthUser(
+        id=get_new_id(),
+        first_name="Fikernew",
+        last_name="Birhanu",
+        phone_number="251930316621",
+        email="ffekirnew0808@gmail.com",
+        password_hash="$2b$12$mlewRx4nfy7FKCB.RJrVs.N.CD95q3DBBDr6zqxtOzQoBvQjnzFK6",
+        verified=True,
+        logged_in=False,
+        create_datetime=datetime.now(UTC),
+        update_datetime=datetime.now(UTC),
+        deleted_datetime=datetime.now(UTC),
+        deleted=False,
+    )
+
+
 def get_consumer_auth_user() -> AuthUser:
     return AuthUser(
         id=get_new_id(),
