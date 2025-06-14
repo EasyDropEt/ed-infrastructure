@@ -72,3 +72,27 @@ def get_driver_auth_user() -> AuthUser:
         deleted_datetime=datetime.now(UTC),
         deleted=False,
     )
+
+
+def get_random_auth_user(
+    first_name: str,
+    last_name: str,
+    index: int,
+) -> AuthUser:
+    phone_number = "2519000000"
+    phone_number += str(index) if len(str(index)) == 2 else "0" + str(index)
+
+    return AuthUser(
+        id=get_new_id(),
+        first_name=first_name,
+        last_name=last_name,
+        phone_number=phone_number,
+        email="default@ed.com",
+        password_hash="",
+        verified=True,
+        logged_in=False,
+        create_datetime=datetime.now(UTC),
+        update_datetime=datetime.now(UTC),
+        deleted_datetime=datetime.now(UTC),
+        deleted=False,
+    )

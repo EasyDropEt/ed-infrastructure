@@ -206,6 +206,7 @@ class OrderModel(BaseModel):
     latest_time_of_delivery: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
     )
+    distance_in_km: Mapped[float] = mapped_column(Float, nullable=False)
     customer_rating: Mapped[int] = mapped_column(Integer, nullable=True)
     expected_delivery_time: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
