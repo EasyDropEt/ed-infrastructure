@@ -17,9 +17,16 @@ TModel = TypeVar("TModel", bound=BaseModel)
 class AsyncGenericRepository(
     Generic[TEntity, TModel], ABCAsyncGenericRepository[TEntity]
 ):
-    def __init__(self, entity_cls: Type[TModel], session: AsyncSession):
+    def __init__(self, entity_cls: Type[TModel]):
         self._entity_cls = entity_cls
-        self._session = session
+
+    @property
+    def session(self) -> AsyncSession:
+        return self._session
+
+    @session.setter
+    def session(self, value: AsyncSession):
+        self._session = value
 
     @classmethod
     @abstractmethod
