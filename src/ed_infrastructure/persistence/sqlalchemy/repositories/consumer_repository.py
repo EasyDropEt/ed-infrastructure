@@ -5,8 +5,6 @@ from ed_domain.persistence.async_repositories.abc_async_consumer_repository impo
 from ed_infrastructure.persistence.sqlalchemy.models import ConsumerModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
-from ed_infrastructure.persistence.sqlalchemy.repositories.location_repository import \
-    LocationRepository
 
 
 class ConsumerRepository(
@@ -25,7 +23,7 @@ class ConsumerRepository(
             phone_number=model.phone_number,
             profile_image_url=model.profile_image_url,
             email=model.email,
-            location=LocationRepository._to_entity(model.location),
+            location_id=model.location_id,
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,
             deleted=model.deleted,
@@ -42,7 +40,7 @@ class ConsumerRepository(
             phone_number=entity.phone_number,
             profile_image_url=entity.profile_image_url,
             email=entity.email,
-            location_id=entity.location.id,
+            location_id=entity.location_id,
             create_datetime=entity.create_datetime,
             update_datetime=entity.update_datetime,
             deleted=entity.deleted,

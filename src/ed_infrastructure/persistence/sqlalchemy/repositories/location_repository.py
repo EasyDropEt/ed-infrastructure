@@ -1,4 +1,4 @@
-from ed_domain.core.entities.location import Location
+from ed_domain.core.aggregate_roots import Location
 from ed_domain.persistence.async_repositories.abc_async_location_repository import \
     ABCAsyncLocationRepository
 

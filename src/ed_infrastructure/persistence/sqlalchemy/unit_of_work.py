@@ -7,9 +7,9 @@ from ed_domain.persistence.async_repositories import (
     ABCAsyncConsumerRepository, ABCAsyncDeliveryJobRepository,
     ABCAsyncDriverRepository, ABCAsyncLocationRepository,
     ABCAsyncNotificationRepository, ABCAsyncOrderRepository,
-    ABCAsyncOtpRepository, ABCAsyncUnitOfWork)
+    ABCAsyncOtpRepository, ABCAsyncParcelRepository, ABCAsyncUnitOfWork)
 from ed_domain.persistence.async_repositories.abc_async_unit_of_work import \
-    ABCAsyncParcelRepository
+    ABCAsyncAdminRepository
 from ed_domain.persistence.async_repositories.abc_async_waypoint_repository import \
     ABCAsyncWaypointRepository
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -92,6 +92,10 @@ class UnitOfWork(ABCAsyncUnitOfWork):
             self._parcel_repository,
             self._api_key_repository,
         ]
+
+    @property
+    def admin_repository(self) -> ABCAsyncAdminRepository:
+        return self._admin_repository
 
     @property
     def bill_repository(self) -> ABCAsyncBillRepository:
