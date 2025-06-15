@@ -7,7 +7,8 @@ from ed_domain.persistence.async_repositories import (
     ABCAsyncConsumerRepository, ABCAsyncDeliveryJobRepository,
     ABCAsyncDriverRepository, ABCAsyncLocationRepository,
     ABCAsyncNotificationRepository, ABCAsyncOrderRepository,
-    ABCAsyncOtpRepository, ABCAsyncParcelRepository, ABCAsyncUnitOfWork)
+    ABCAsyncOtpRepository, ABCAsyncParcelRepository, ABCAsyncUnitOfWork,
+    ABCAsyncWebhookRepository)
 from ed_domain.persistence.async_repositories.abc_async_unit_of_work import \
     ABCAsyncAdminRepository
 from ed_domain.persistence.async_repositories.abc_async_waypoint_repository import \
@@ -24,6 +25,8 @@ from ed_infrastructure.persistence.sqlalchemy.repositories import (
     DeliveryJobRepository, DriverRepository, LocationRepository,
     NotificationRepository, OrderRepository, OtpRepository, ParcelRepository,
     WaypointRepository)
+from src.ed_infrastructure.persistence.sqlalchemy.repositories.webhook_repository import \
+    WebhookRepository
 
 
 class UnitOfWork(ABCAsyncUnitOfWork):
@@ -74,6 +77,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
         self._parcel_repository = ParcelRepository()
         self._waypoint_repository = WaypointRepository()
         self._api_key_repository = ApiKeyRepository()
+        self._webhook_repository = WebhookRepository()
 
         self._repositories = [
             self._admin_repository,
@@ -91,6 +95,7 @@ class UnitOfWork(ABCAsyncUnitOfWork):
             self._waypoint_repository,
             self._parcel_repository,
             self._api_key_repository,
+            self._webhook_repository,
         ]
 
     @property
@@ -148,6 +153,10 @@ class UnitOfWork(ABCAsyncUnitOfWork):
     @property
     def api_key_repository(self) -> ABCAsyncApiKeyRepository:
         return self._api_key_repository
+
+    @property
+    def webhook_repository(self) -> ABCAsyncWebhookRepository:
+        return self._webhook_repository
 
     @property
     def parcel_repository(self) -> ABCAsyncParcelRepository:

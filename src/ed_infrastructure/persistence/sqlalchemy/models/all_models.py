@@ -93,6 +93,7 @@ class BusinessModel(BaseModel):
         ForeignKey("auth_user.id"), index=True)
     location_id: Mapped[UUID] = mapped_column(ForeignKey("location.id"))
     api_keys: Mapped[list["ApiKeyModel"]] = relationship(lazy="selectin")
+    webhook: Mapped["WebhookModel"] = relationship(lazy="joined")
 
 
 class CarModel(BaseModel):
@@ -289,3 +290,13 @@ class WaypointModel(BaseModel):
     order_id: Mapped[UUID] = mapped_column(ForeignKey("order.id"), index=True)
     delivery_job_id: Mapped[UUID] = mapped_column(
         ForeignKey("delivery_job.id"))
+
+
+class WebhookModel(BaseModel):
+    __tablename__ = "webhook"
+
+    url: Mapped[str] = mapped_column(String)
+
+    # Relationships
+    business_id: Mapped[UUID] = mapped_column(
+        ForeignKey("business.id"), index=True)

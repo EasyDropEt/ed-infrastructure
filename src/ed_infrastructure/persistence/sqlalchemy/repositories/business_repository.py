@@ -9,6 +9,8 @@ from ed_infrastructure.persistence.sqlalchemy.repositories.api_key_repository im
     ApiKeyRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
     AsyncGenericRepository
+from ed_infrastructure.persistence.sqlalchemy.repositories.webhook_repository import \
+    WebhookRepository
 
 
 class BusinessRepository(
@@ -17,6 +19,7 @@ class BusinessRepository(
     def __init__(self) -> None:
         super().__init__(BusinessModel)
         self._api_key_repository = ApiKeyRepository()
+        self._webhook_repository = WebhookRepository()
 
     async def update(self, id: UUID, entity: Business) -> bool:
         api_keys_updated = False
@@ -24,9 +27,14 @@ class BusinessRepository(
             if await self._api_key_repository.update(api_key.id, api_key):
                 api_keys_updated = True
 
+        webhook_updated = False
+        if entity.webhook is not None:
+            webhook_updated = await self._webhook_repository.update(
+                entity.webhook.id, entity.webhook
+            )
         business_updated = await super().update(id, entity)
 
-        return api_keys_updated or business_updated
+        return api_keys_updated or business_updated or webhook_updated
 
     @classmethod
     def _to_entity(cls, model: BusinessModel) -> Business:
@@ -41,6 +49,7 @@ class BusinessRepository(
             api_keys=[
                 ApiKeyRepository._to_entity(api_key) for api_key in model.api_keys
             ],
+            webhook=WebhookRepository._to_entity(model.webhook),
             location_id=model.location_id,
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,

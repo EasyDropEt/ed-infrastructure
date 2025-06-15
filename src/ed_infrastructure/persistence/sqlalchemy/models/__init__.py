@@ -1,7 +1,8 @@
 from ed_infrastructure.persistence.sqlalchemy.models.all_models import (
     AdminModel, ApiKeyModel, AuthUserModel, BillModel, BusinessModel, CarModel,
     ConsumerModel, DeliveryJobModel, DriverModel, LocationModel,
-    NotificationModel, OrderModel, OtpModel, ParcelModel, WaypointModel)
+    NotificationModel, OrderModel, OtpModel, ParcelModel, WaypointModel,
+    WebhookModel)
 from ed_infrastructure.persistence.sqlalchemy.models.base_model import \
     BaseModel
 
@@ -22,4 +23,5 @@ __all__ = [
     "WaypointModel",
     "NotificationModel",
     "OtpModel",
+    "WebhookModel",
 ]
