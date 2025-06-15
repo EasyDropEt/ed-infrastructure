@@ -8,7 +8,7 @@ async def main():
     config = get_config()
     uow = UnitOfWork(config)
 
-    await seed_consumers(uow)
+    await uow.create_tables()
 
 
 if __name__ == "__main__":

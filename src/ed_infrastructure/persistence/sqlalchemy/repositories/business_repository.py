@@ -49,7 +49,10 @@ class BusinessRepository(
             api_keys=[
                 ApiKeyRepository._to_entity(api_key) for api_key in model.api_keys
             ],
-            webhook=WebhookRepository._to_entity(model.webhook),
+            webhook=(
+                WebhookRepository._to_entity(
+                    model.webhook) if model.webhook else None
+            ),
             location_id=model.location_id,
             create_datetime=model.create_datetime,
             update_datetime=model.update_datetime,

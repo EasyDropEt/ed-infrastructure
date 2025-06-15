@@ -30,7 +30,6 @@ from ed_infrastructure.persistence.sqlalchemy.repositories import (
 class UnitOfWork(ABCAsyncUnitOfWork):
     async def create_tables(self) -> None:
         async with self._db_engine.engine.begin() as conn:
-            await conn.run_sync(self._base.metadata.drop_all)
             await conn.run_sync(self._base.metadata.create_all)
 
     async def stop(self) -> None:
