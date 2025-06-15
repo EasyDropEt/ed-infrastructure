@@ -24,9 +24,7 @@ from ed_infrastructure.persistence.sqlalchemy.repositories import (
     BusinessRepository, CarRepository, ConsumerRepository,
     DeliveryJobRepository, DriverRepository, LocationRepository,
     NotificationRepository, OrderRepository, OtpRepository, ParcelRepository,
-    WaypointRepository)
-from src.ed_infrastructure.persistence.sqlalchemy.repositories.webhook_repository import \
-    WebhookRepository
+    WaypointRepository, WebhookRepository)
 
 
 class UnitOfWork(ABCAsyncUnitOfWork):

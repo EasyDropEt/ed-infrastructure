@@ -28,6 +28,8 @@ from ed_infrastructure.persistence.sqlalchemy.repositories.parcel_repository imp
     ParcelRepository
 from ed_infrastructure.persistence.sqlalchemy.repositories.waypoint_repository import \
     WaypointRepository
+from ed_infrastructure.persistence.sqlalchemy.repositories.webhook_repository import \
+    WebhookRepository
 
 __all__ = [
     "ApiKeyRepository",
@@ -45,4 +47,5 @@ __all__ = [
     "OtpRepository",
     "ParcelRepository",
     "WaypointRepository",
+    "WebhookRepository",
 ]

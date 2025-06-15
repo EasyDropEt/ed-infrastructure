@@ -1,6 +1,6 @@
 from ed_domain.core.entities.webhook import Webhook
 from ed_domain.persistence.async_repositories.abc_async_webhook_repository import \
-    ABCAsyncWebHookRepository
+    ABCAsyncWebhookRepository
 
 from ed_infrastructure.persistence.sqlalchemy.models import WebhookModel
 from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository import \
@@ -8,7 +8,7 @@ from ed_infrastructure.persistence.sqlalchemy.repositories.generic_repository im
 
 
 class WebhookRepository(
-    ABCAsyncWebHookRepository, AsyncGenericRepository[Webhook, WebhookModel]
+    ABCAsyncWebhookRepository, AsyncGenericRepository[Webhook, WebhookModel]
 ):
     def __init__(self) -> None:
         super().__init__(WebhookModel)
