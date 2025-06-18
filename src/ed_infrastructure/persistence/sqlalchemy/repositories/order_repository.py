@@ -49,6 +49,10 @@ class OrderRepository(
             update_datetime=model.update_datetime,
             deleted=model.deleted,
             deleted_datetime=model.deleted_datetime,
+            expected_delivery_time=model.expected_delivery_time,
+            actual_delivery_time=model.actual_delivery_time,
+            picked_up_datetime=model.picked_up_datetime,
+            completed_datetime=model.completed_datetime,
         )
 
     @classmethod
@@ -68,4 +72,8 @@ class OrderRepository(
             update_datetime=entity.update_datetime,
             deleted=entity.deleted,
             deleted_datetime=entity.deleted_datetime,
+            expected_delivery_time=entity.expected_delivery_time,
+            actual_delivery_time=entity.actual_delivery_time,
+            picked_up_datetime=entity.picked_up_datetime,
+            completed_datetime=entity.completed_datetime,
         )
